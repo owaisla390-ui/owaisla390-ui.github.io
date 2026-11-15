@@ -1,14 +1,20 @@
 {
   "name": "GLOBOO — Enterprise AI Firewall & CFO",
   "short_name": "GLOBOO",
-  "start_url": "/",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#0b192c",
   "icons": [
     {
-      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAbUlEQVR4nO3BMQEAAADCoPVPbQ0PoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeDcYAAABf924fQAAAABJRU5ErkJggg==",
+      "src": "https://icons8.com",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://icons8.com",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
