@@ -1,3 +1,9 @@
-# GLOBOO — Zero-Loss Enterprise AI Firewall & Autonomous CFO
-Deterministic 0.04ms AI execution firewall, SHA-256 cryptographic audit vault, and multi-language autonomous CFO deal closer for global supply chain and FinTech enterprises.
-- Live Sandbox & Platform: https://github.io
+# GLOBOO
+
+> Zero-Loss Enterprise AI Execution Firewall & Autonomous CFO Platform.
+
+## Documentation & Live Endpoints
+- [GLOBOO Live Platform & Sandbox](https://github.io): Deterministic 0.04ms AI execution firewall, SHA-256 audit vault, and multi-language autonomous CFO.
+- [Python SDK & Firewall Architecture](https://github.io#sdk): Zero-loss policy engine and latency benchmarks.
+- [Enterprise Licensing Tiers](https://github.io#tiers): Self-hosted SDK and USA Enterprise Global license specifications.
+
