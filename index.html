@@ -26,4 +26,15 @@ print(g.zero_loss_lock('cfo-01', 'Maersk Shipping', 9500.0, 'Freight'))</pre><di
 <script>setTimeout(()=>{document.querySelectorAll('button,a').forEach(b=>{if(b.innerText.includes('4,999')||b.innerText.includes('25,000')||b.innerText.includes('Request License')){b.removeAttribute('onclick');b.onclick=e=>{e.preventDefault();openLic(b.innerText.trim())}}})},300)</script>
 <script>window.alert=function(m){openLic(String(m).slice(0,45))}</script>
 <script>document.body.innerHTML=document.body.innerHTML.replaceAll('globoo.ai','globooai.com')</script>
+<script>
+(function(){
+  const L={v:'Vendor Name',amt:'Transaction Amount in USD',memo:'Transaction Memo',dl:'Select Deal Language',da:'Deal Amount in USD',cb:'Cash in Bank in USD',mb:'Monthly Burn in USD',le_n:'Full Name',le_e:'Work Email',le_c:'Company Name',le_v:'Monthly AI Spend Volume',sc_in:'Paste AI Prompt or Invoice Text'};
+  Object.entries(L).forEach(([id,t])=>{const el=document.getElementById(id);if(el)el.setAttribute('aria-label',t);});
+  document.querySelectorAll('input:not([aria-label]),select:not([aria-label]),textarea:not([aria-label])').forEach((el,i)=>el.setAttribute('aria-label',el.placeholder||el.name||'Field '+(i+1)));
+  document.querySelectorAll('small,p,span,div').forEach(el=>{if(el.style.color==='rgb(113, 113, 122)'||el.getAttribute('style')?.includes('#71717a'))el.style.color='#a1a1aa';});
+  const b=document.getElementById('sc_badge');if(b){b.style.background='#b91c1c';b.style.color='#ffffff';}
+  const w=document.querySelector('.w');if(w&&!document.querySelector('main'))w.setAttribute('role','main');
+  document.querySelectorAll('h3').forEach(h=>{if(!h.closest('.card')){const h2=document.createElement('h2');h2.className=h.className;h2.style.cssText=h.style.cssText;h2.innerHTML=h.innerHTML;h.replaceWith(h2);}});
+})();
+</script>
 
