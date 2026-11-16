@@ -37,4 +37,14 @@ print(g.zero_loss_lock('cfo-01', 'Maersk Shipping', 9500.0, 'Freight'))</pre><di
   document.querySelectorAll('h3').forEach(h=>{if(!h.closest('.card')){const h2=document.createElement('h2');h2.className=h.className;h2.style.cssText=h.style.cssText;h2.innerHTML=h.innerHTML;h.replaceWith(h2);}});
 })();
 </script>
+<script>
+window.runDl = window.runDl || function(){};
+document.querySelectorAll('h3').forEach(function(h){
+  var h2 = document.createElement('h2');
+  h2.className = h.className;
+  h2.style.cssText = h.style.cssText;
+  h2.innerHTML = h.innerHTML;
+  h.parentNode.replaceChild(h2, h);
+});
+</script>
 
