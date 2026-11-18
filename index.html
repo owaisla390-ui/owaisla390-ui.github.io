@@ -51,8 +51,10 @@ document.querySelectorAll('h3').forEach(function(h){
 <script>
 (function() {
   const SB_URL = 'https://supabase.co';
+  
   const SB_KEY = 'sb_publishable_MK2WS7d1kY0mX_e8Il5bgA_p4yjOL2z';
-  const hdrs = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' };
+  const hdrs = { 'apikey': SB_KEY, 'Content-Type': 'application/json' };
+  
   const genKey = () => {
     const a = new Uint8Array(16); crypto.getRandomValues(a);
     return 'glb_live_' + Array.from(a, b => b.toString(16).padStart(2, '0')).join('');
