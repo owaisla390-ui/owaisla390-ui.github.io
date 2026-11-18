@@ -48,15 +48,4 @@ document.querySelectorAll('h3').forEach(function(h){
   h.parentNode.replaceChild(h2, h);
 });
 </script>
-<script>
-setInterval(function(){
-  var h=Array.from(document.querySelectorAll('*')).find(el=>el.children.length===0&&el.textContent.toUpperCase().includes('ENTERPRISE CLIENT PORTAL'));
-  if(h&&!document.getElementById('glb-real-portal')){
-    var card=h.closest('div[style*="border"]')||h.parentElement.parentElement;
-    card.id='loginModalBox';
-    card.innerHTML='';
-    var m=card.parentElement;if(m&&!m.id)m.id='loginModal';
-    window.dispatchEvent(new Event('DOMContentLoaded'));
-  }
-},300);
-</script>
+
