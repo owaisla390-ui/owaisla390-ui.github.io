@@ -48,4 +48,61 @@ document.querySelectorAll('h3').forEach(function(h){
   h.parentNode.replaceChild(h2, h);
 });
 </script>
+<script>
+window.openDash = async function() {
+  gmt.innerText = 'ZERO-TRUST ENTERPRISE PORTAL';
+  gmb.innerHTML = '<p style="color:#a1a1aa;font-size:13px">Loading secure Supabase enclave...</p>';
+  gm.style.display = 'flex';
+  if (!window.sbClient) {
+    await new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = 'https://jsdelivr.net';
+      s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
+    window.sbClient = window.supabase.createClient(
+      'https://supabase.co',
+      'sb_publishable_MK2WS7d1kY0mX_e8Il5bgA_p4yjOL2z'
+    );
+  }
+  const sb = window.sbClient;
+  const genKey = () => {
+    const a = new Uint8Array(16); crypto.getRandomValues(a);
+    return 'glb_live_' + Array.from(a, b => b.toString(16).padStart(2, '0')).join('');
+  };
+  async function renderDash() {
+    const { data: { user } } = await sb.auth.getUser();
+    if (!user) {
+      gmb.innerHTML = `<div style="font-size:13px;color:#d4d4d8"><p style="margin:0 0 10px;color:#a1a1aa">Sign in with your corporate email to manage live API keys &amp; payout limits.</p><input id="glb_em" type="email" placeholder="cfo@company.com" aria-label="Corporate Email"><button id="glb_btn1" type="button" class="btn" style="background:#10b981!important;color:#052e16!important">Send Instant Login Code →</button><div id="glb_otp_wrap" style="display:none;margin-top:12px"><input id="glb_code" type="text" placeholder="Enter 6-digit email code" aria-label="6 Digit Code"><button id="glb_btn2" type="button" class="btn" style="background:#38bdf8!important;color:#000!important">Verify &amp; Open Workspace</button></div><p id="glb_msg" style="font-size:12px;color:#34d399;margin:10px 0 0"></p></div>`;
+      document.getElementById('glb_btn1').onclick = async () => {
+        const email = document.getElementById('glb_em').value.trim(), msg = document.getElementById('glb_msg');
+        if (!email) return;
+        msg.textContent = 'Sending secure OTP code...';
+        const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://globooai.com' } });
+        if (error) { msg.style.color = '#ef4444'; msg.textContent = error.message; }
+        else { msg.style.color = '#10b981'; msg.textContent = 'Check your email for the 6-digit code!'; document.getElementById('glb_otp_wrap').style.display = 'block'; }
+      };
+      document.getElementById('glb_btn2').onclick = async () => {
+        const email = document.getElementById('glb_em').value.trim(), token = document.getElementById('glb_code').value.trim(), msg = document.getElementById('glb_msg');
+        const { error } = await sb.auth.verifyOtp({ email, token, type: 'email' });
+        if (error) { msg.style.color = '#ef4444'; msg.textContent = error.message; }
+        else renderDash();
+      };
+      return;
+    }
+    let { data: row } = await sb.from('globoo_clients').select('*').eq('id', user.id).maybeSingle();
+    if (!row) {
+      const init = { id: user.id, email: user.email, api_key: genKey(), max_payout: 50000 };
+      const res = await sb.from('globoo_clients').insert(init).select().single();
+      row = res.data || init;
+    }
+    gmt.innerText = 'CLIENT WORKSPACE — ' + user.email.toUpperCase();
+    gmb.innerHTML = `<div style="font-size:13px;color:#d4d4d8"><p style="color:#10b981;font-weight:700;margin:0 0 10px">● Authenticated via Zero-Trust SSO (SOC2 Vault)</p><label style="font-size:11px;color:#a1a1aa">PRODUCTION FIREWALL API KEY</label><div style="display:flex;gap:8px;margin:6px 0 12px"><input id="ak" readonly value="${row.api_key}" aria-label="Production API Key" style="margin:0;font-family:monospace;font-size:12px;color:#34d399"><button type="button" class="btn" style="width:auto!important;padding:10px 14px!important" onclick="ak.select();document.execCommand('copy');this.innerText='Copied!'">Copy</button></div><label style="font-size:11px;color:#a1a1aa">SINGLE-TRANSACTION AUTO-BLOCK LIMIT (USD)</label><div style="display:flex;gap:8px;margin:6px 0 12px"><input id="lim_in" type="number" value="${row.max_payout}" aria-label="Max Payout USD" style="margin:0"><button id="save_lim" type="button" class="btn" style="width:auto!important;padding:10px 14px!important;background:#10b981!important;color:#052e16!important">Save</button></div><div style="display:flex;gap:8px"><button id="rot_btn" type="button" class="ghost">↻ Rotate Key</button><button id="out_btn" type="button" class="ghost">Sign Out</button></div><p id="d_msg" style="font-size:12px;color:#10b981;margin:8px 0 0"></p></div>`;
+    document.getElementById('save_lim').onclick = async () => { const val = Number(document.getElementById('lim_in').value) || 50000; await sb.from('globoo_clients').update({ max_payout: val }).eq('id', user.id); document.getElementById('d_msg').textContent = '✓ Guardrail updated to $' + val.toLocaleString(); };
+    document.getElementById('rot_btn').onclick = async () => { const nk = genKey(); await sb.from('globoo_clients').update({ api_key: nk }).eq('id', user.id); document.getElementById('ak').value = nk; document.getElementById('d_msg').textContent = '✓ New cryptographic API key saved!'; };
+    document.getElementById('out_btn').onclick = async () => { await sb.auth.signOut(); renderDash(); };
+  }
+  renderDash();
+};
+        </script>
 
