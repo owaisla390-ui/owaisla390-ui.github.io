@@ -650,26 +650,14 @@ window.openLic = function(t) {
     });
   }, 300);
 })();
-</script>
 <script>
 (function() {
   var t = document.getElementById('tiers');
-  if (t && !document.getElementById('glb_pilot_badge')) {
-    var b = document.createElement('div');
-    b.id = 'glb_pilot_badge';
-    b.style.cssText = 'max-width:720px;margin:0 auto 24px;padding:12px 16px;border:1px solid #10b981;background:rgba(16,185,129,.08);border-radius:12px;text-align:center;font-size:13px;color:#d4d4d8';
-    b.innerHTML = '🇺🇸 <strong style="color:#34d399">14-Day US Enterprise Pilot (Zero-Risk Proof of Value):</strong> Deploy in read-only shadow mode across your ERP/agent stack before committing to an annual license.';
-    t.insertBefore(b, t.children);
-  }
-  if (!document.getElementById('glb_founder_lnk')) {
-    var f = document.createElement('div');
-    f.id = 'glb_founder_lnk';
-    f.style.cssText = 'max-width:1100px;margin:0 auto 28px;padding:14px 16px;border-top:1px solid #18181b;text-align:center;font-size:12px;color:#a1a1aa';
-    f.innerHTML = 'Founder &amp; Architect: <strong style="color:#fff">Muhammad Owais</strong> &bull; <a href="https://linkedin.com" target="_blank" rel="noopener" style="color:#38bdf8;text-decoration:underline">Verify Founder on LinkedIn &rarr;</a>';
-    document.body.appendChild(f);
-  }
+  if (t) t.insertAdjacentHTML('afterbegin', '<div style="max-width:720px;margin:0 auto 24px;padding:12px 16px;border:1px solid #10b981;background:rgba(16,185,129,.08);border-radius:12px;text-align:center;font-size:13px;color:#d4d4d8">🇺🇸 <strong style="color:#34d399">14-Day US Enterprise Pilot (Zero-Risk Proof of Value):</strong> Deploy in read-only shadow mode across your ERP/agent stack before committing to an annual license.</div>');
+  document.body.insertAdjacentHTML('beforeend', '<div style="max-width:1100px;margin:0 auto 28px;padding:14px 16px;border-top:1px solid #18181b;text-align:center;font-size:12px;color:#a1a1aa">Founder &amp; Architect: <strong style="color:#fff">Muhammad Owais</strong> &bull; <a href="https://' + '://linkedin.com" target="_blank" rel="noopener" style="color:#38bdf8;text-decoration:underline">Verify Founder on LinkedIn &rarr;</a></div>');
 })();
 </script>
+
 
 
 
