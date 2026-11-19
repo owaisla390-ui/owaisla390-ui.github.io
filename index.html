@@ -440,18 +440,25 @@ window.openLic = function(t) {
       localStorage.setItem('glb_reg_client', JSON.stringify(clientData));
 
       // 2. Save to Supabase Vault (globoo_leads)
+            // 3. Send Instant Direct Email Alert to Founder Inbox (globooai@gmail.com) via Web3Forms
       try {
-        await fetch(SB_URL + '/rest/v1/globoo_leads', {
+        await fetch('https://web3forms.com', {
           method: 'POST',
-          headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
-            tier: 'LIVE CLIENT WORKSPACE (' + addr + ')',
-            full_name: name,
-            company: comp,
-            work_email: mail
+            access_key: '561c2641-bfc8-4901-9c1d-f62ec034fbce',
+            subject: '🚨 NEW GLOBOO CLIENT ACTIVE: ' + comp + ' (' + name + ')',
+            from_name: 'GLOBOO Enterprise Portal',
+            Client_Name: name,
+            Company: comp,
+            Office_Address: addr,
+            Corporate_Email: mail,
+            Provisioned_API_Key: newApiKey,
+            Status: 'Client actively using GLOBOO Enterprise Workspace right now'
           })
         });
       } catch (e) {}
+      
 
       // 3. Send Instant Silent Email Notification to Founder Inbox (globooai@gmail.com)
       try {
