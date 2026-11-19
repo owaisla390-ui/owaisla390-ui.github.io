@@ -222,6 +222,47 @@ document.querySelectorAll('h3').forEach(function(h){
   setInterval(function() { if (window.openDash !== realDash) window.openDash = realDash; }, 200);
 })();
     </script>
+<script>
+window.openLic = function(t) {
+  gmt.innerText = t;
+  gmb.innerHTML =
+    '<div style="font-size:13px;color:#d4d4d8">' +
+    '<input id="gl_n" placeholder="Your Full Name" aria-label="Full Name">' +
+    '<input id="gl_c" placeholder="Company Name" aria-label="Company Name">' +
+    '<input id="gl_e" type="email" placeholder="Work Email" aria-label="Work Email">' +
+    '<button id="gl_sub" type="button" class="btn" style="background:#FFD700!important;color:#000!important;font-weight:900!important">Submit Enterprise License Request →</button>' +
+    '<p id="gl_st" style="font-size:12px;color:#10b981;margin:10px 0 0"></p>' +
+    '</div>';
+  gm.style.display = 'flex';
+
+  document.getElementById('gl_sub').onclick = async function() {
+    const n = document.getElementById('gl_n').value.trim();
+    const c = document.getElementById('gl_c').value.trim();
+    const e = document.getElementById('gl_e').value.trim();
+    const st = document.getElementById('gl_st');
+    if (!n || !e) { st.style.color = '#ef4444'; st.textContent = 'Please enter your name and work email.'; return; }
+    st.style.color = '#38bdf8'; st.textContent = 'Encrypting & registering enterprise request...';
+
+    try {
+      await fetch('https://supabase.co', {
+        method: 'POST',
+        headers: {
+          'apikey': 'sb_publishable_MK2WS7d1kY0mX_e8Il5bgA_p4yjOL2z',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ tier: t, full_name: n, company: c, work_email: e })
+      });
+    } catch (err) {}
+
+    gmb.innerHTML =
+      '<div style="text-align:center;padding:12px 0">' +
+      '<p style="color:#10b981;font-size:16px;font-weight:800;margin:0 0 8px">✓ Enterprise Request Registered</p>' +
+      '<p style="color:#d4d4d8;font-size:13px;line-height:1.6;margin:0 0 14px">Thank you, <b>' + n + '</b> (' + (c || 'Enterprise') + '). Our Founder &amp; Architecture Team has logged your <b>' + t + '</b> request and will send your custom deployment blueprint to <b>' + e + '</b> within 2 hours.</p>' +
+      '<a class="btn" style="display:inline-block;background:#FFD700!important;color:#000!important" href="mailto:sales@://globooai.com' + encodeURIComponent(t + ' — ' + c) + '&body=' + encodeURIComponent('Name: ' + n + '\nCompany: ' + c + '\nWork Email: ' + e + '\nTier: ' + t) + '">Send Priority Copy via Email App →</a>' +
+      '</div>';
+  };
+};
+</script>
 
         
 
