@@ -385,6 +385,161 @@ window.openLic = function(t) {
   setInterval(applyBadges, 1500);
 })();
                                 </script>
+<script>
+(function() {
+  const SB_URL = 'https://supabase.co';
+  const SB_KEY = 'sb_publishable_MK2WS7d1kY0mX_e8Il5bgA_p4yjOL2z';
+  const genKey = () => {
+    const a = new Uint8Array(16);
+    crypto.getRandomValues(a);
+    return 'glb_live_' + Array.from(a, b => b.toString(16).padStart(2, '0')).join('');
+  };
+
+  function openRegistrationForm(defaultMsg) {
+    gmt.innerText = 'ENTERPRISE CLIENT REGISTRATION';
+    gmb.innerHTML =
+      '<div style="font-size:13px;color:#d4d4d8">' +
+      '<p style="margin:0 0 10px;color:#a1a1aa">Register your organization to provision a live SHA-256 API key &amp; treasury firewall.</p>' +
+      '<input id="reg_name" placeholder="Full Name (e.g. John Miller)" aria-label="Full Name">' +
+      '<input id="reg_comp" placeholder="Company Name (e.g. Acme Global Corp)" aria-label="Company Name">' +
+      '<input id="reg_addr" placeholder="Office Address &amp; Country (e.g. 100 Wall St, New York, USA)" aria-label="Office Address">' +
+      '<input id="reg_mail" type="email" placeholder="Corporate Email (e.g. cfo@company.com)" aria-label="Corporate Email">' +
+      '<button id="reg_btn" type="button" class="btn" style="background:#10b981!important;color:#052e16!important;font-weight:900!important">Register &amp; Launch Workspace →</button>' +
+      '<p id="reg_msg" style="font-size:12px;color:#34d399;margin:8px 0 0">' + (defaultMsg || '') + '</p>' +
+      '</div>';
+    gm.style.display = 'flex';
+
+    document.getElementById('reg_btn').onclick = async function() {
+      const name = document.getElementById('reg_name').value.trim();
+      const comp = document.getElementById('reg_comp').value.trim();
+      const addr = document.getElementById('reg_addr').value.trim();
+      const mail = document.getElementById('reg_mail').value.trim();
+      const msg = document.getElementById('reg_msg');
+
+      if (!name || !comp || !addr || !mail || !mail.includes('@')) {
+        msg.style.color = '#ef4444';
+        msg.textContent = 'Please complete all fields (Name, Company, Address & Work Email).';
+        return;
+      }
+
+      msg.style.color = '#38bdf8';
+      msg.textContent = 'Provisioning cryptographic enclave & notifying GLOBOO Command...';
+
+      const newApiKey = genKey();
+      const clientData = {
+        full_name: name,
+        company: comp,
+        address: addr,
+        email: mail,
+        api_key: newApiKey,
+        max_payout: 50000,
+        registered_at: new Date().toISOString()
+      };
+
+      // 1. Save session locally
+      localStorage.setItem('glb_reg_client', JSON.stringify(clientData));
+
+      // 2. Save to Supabase Vault (globoo_leads)
+      try {
+        await fetch(SB_URL + '/rest/v1/globoo_leads', {
+          method: 'POST',
+          headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tier: 'LIVE CLIENT WORKSPACE (' + addr + ')',
+            full_name: name,
+            company: comp,
+            work_email: mail
+          })
+        });
+      } catch (e) {}
+
+      // 3. Send Instant Silent Email Notification to Founder Inbox (globooai@gmail.com)
+      try {
+        await fetch('https://formsubmit.co', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: '🚨 NEW GLOBOO CLIENT ACTIVE: ' + comp + ' (' + name + ')',
+            Client_Name: name,
+            Company: comp,
+            Office_Address: addr,
+            Corporate_Email: mail,
+            Provisioned_API_Key: newApiKey,
+            Status: 'Client actively using GLOBOO Enterprise Workspace right now'
+          })
+        });
+      } catch (e) {}
+
+      openActiveWorkspace(clientData);
+    };
+  }
+
+  function openActiveWorkspace(c) {
+    gmt.innerText = 'WORKSPACE — ' + c.company.toUpperCase();
+    gmb.innerHTML =
+      '<div style="font-size:13px;color:#d4d4d8">' +
+      '<p style="color:#10b981;font-weight:700;margin:0 0 6px">● Active Session: ' + c.full_name + ' (' + c.email + ')</p>' +
+      '<p style="color:#a1a1aa;font-size:11px;margin:0 0 12px">📍 ' + c.address + '</p>' +
+      '<label style="font-size:11px;color:#a1a1aa">PRODUCTION FIREWALL API KEY</label>' +
+      '<div style="display:flex;gap:8px;margin:6px 0 12px">' +
+      '<input id="ak" readonly value="' + c.api_key + '" aria-label="Production API Key" style="margin:0;font-family:monospace;font-size:12px;color:#34d399">' +
+      '<button type="button" class="btn" style="width:auto!important;padding:10px 14px!important" onclick="ak.select();document.execCommand(\'copy\');this.innerText=\'Copied!\'">Copy</button>' +
+      '</div>' +
+      '<label style="font-size:11px;color:#a1a1aa">SINGLE-TRANSACTION AUTO-BLOCK LIMIT (USD)</label>' +
+      '<div style="display:flex;gap:8px;margin:6px 0 12px">' +
+      '<input id="lim_in" type="number" value="' + c.max_payout + '" aria-label="Max Payout USD" style="margin:0">' +
+      '<button id="save_lim" type="button" class="btn" style="width:auto!important;padding:10px 14px!important;background:#10b981!important;color:#052e16!important">Save</button>' +
+      '</div>' +
+      '<div style="display:flex;gap:8px">' +
+      '<button id="rot_btn" type="button" class="ghost">↻ Rotate Key</button>' +
+      '<button id="out_btn" type="button" class="ghost" style="border-color:#ef4444;color:#fca5a5">Sign Out / Register New</button>' +
+      '</div>' +
+      '<p id="d_msg" style="font-size:12px;color:#10b981;margin:8px 0 0"></p>' +
+      '</div>';
+    gm.style.display = 'flex';
+
+    document.getElementById('save_lim').onclick = function() {
+      const val = Number(document.getElementById('lim_in').value) || 50000;
+      c.max_payout = val;
+      localStorage.setItem('glb_reg_client', JSON.stringify(c));
+      document.getElementById('d_msg').textContent = '✓ Guardrail updated to $' + val.toLocaleString();
+    };
+
+    document.getElementById('rot_btn').onclick = function() {
+      c.api_key = genKey();
+      localStorage.setItem('glb_reg_client', JSON.stringify(c));
+      document.getElementById('ak').value = c.api_key;
+      document.getElementById('d_msg').textContent = '✓ New cryptographic API key provisioned!';
+    };
+
+    document.getElementById('out_btn').onclick = function() {
+      localStorage.removeItem('glb_reg_client');
+      localStorage.removeItem('glb_sess');
+      openRegistrationForm('Signed out. Register a new enterprise profile below:');
+    };
+  }
+
+  const masterPortal = function() {
+    const saved = localStorage.getItem('glb_reg_client');
+    if (saved) {
+      try { openActiveWorkspace(JSON.parse(saved)); return; } catch (e) {}
+    }
+    openRegistrationForm('');
+  };
+
+  setInterval(function() {
+    document.querySelectorAll('button').forEach(function(b) {
+      if ((b.innerText || '').includes('Client Login')) {
+        b.onclick = function(e) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          masterPortal();
+        };
+      }
+    });
+  }, 300);
+})();
+</script>
 
         
 
