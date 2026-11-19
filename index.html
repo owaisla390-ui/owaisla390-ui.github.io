@@ -539,6 +539,117 @@ window.openLic = function(t) {
   }, 300);
 })();
 </script>
+<script>
+(function() {
+  const SB_URL = 'https://supabase.co';
+  const SB_KEY = 'sb_publishable_MK2WS7d1kY0mX_e8Il5bgA_p4yjOL2z';
+  const W3_KEY = '561c2641-bfc8-4901-9c1d-f62ec034fbce';
+
+  // APNI PAYONEER AUR MEEZAN BANK DETAILS YAHAN LIKHEIN:
+  const PAYONEER_ID = 'globooai@gmail.com (Payoneer Global Receiving Account)';
+  const MEEZAN_TITLE = 'GLOBOO / Muhammad Owais';
+  const MEEZAN_IBAN = 'PPK76MEZN0000300116830488';
+  const MEEZAN_SWIFT = 'MEZNPKKA';
+
+  function notifyInbox(subj, payload) {
+    fetch('https://web3forms.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(Object.assign({ access_key: W3_KEY, subject: subj, from_name: 'GLOBOO Checkout Engine' }, payload))
+    }).catch(function(){});
+  }
+
+  window.openPayCheckout = function(tierTitle, amountText) {
+    notifyInbox('👀 LICENSE CHECKOUT OPENED: ' + tierTitle, {
+      Selected_Tier: tierTitle,
+      Amount: amountText,
+      Event: 'Enterprise buyer clicked Get/Request License button'
+    });
+
+    gmt.innerHTML = '💳 ' + tierTitle.toUpperCase();
+    gmb.innerHTML =
+      '<div style="font-size:13px;color:#d4d4d8;max-height:72vh;overflow-y:auto">' +
+      '<input id="pay_n" placeholder="Executive Full Name" aria-label="Full Name">' +
+      '<input id="pay_c" placeholder="Company Name" aria-label="Company Name">' +
+      '<input id="pay_e" type="email" placeholder="Corporate Email" aria-label="Work Email">' +
+
+      '<div style="background:#111827;border:1px solid #38bdf8;border-radius:12px;padding:12px;margin:8px 0">' +
+      '<div style="color:#38bdf8;font-weight:800;font-size:12px;margin-bottom:4px">OPTION 1: PAYONEER GLOBAL TRANSFER (INSTANT USD/EUR)</div>' +
+      '<div style="font-family:monospace;font-size:12px;color:#fff;word-break:break-all;margin-bottom:6px">' + PAYONEER_ID + '</div>' +
+      '<button type="button" class="ghost" style="padding:8px 12px!important;font-size:12px!important" onclick="navigator.clipboard.writeText(\'' + PAYONEER_ID + '\');this.innerText=\'✓ Payoneer ID Copied\'">Copy Payoneer Account</button>' +
+      '</div>' +
+
+      '<div style="background:#052e16;border:1px solid #10b981;border-radius:12px;padding:12px;margin:8px 0">' +
+      '<div style="color:#34d399;font-weight:800;font-size:12px;margin-bottom:4px">OPTION 2: MEEZAN BANK WIRE / SWIFT TRANSFER</div>' +
+      '<div style="font-size:12px;color:#e4e4e7;line-height:1.5;margin-bottom:6px">' +
+      '<b>Title:</b> ' + MEEZAN_TITLE + '<br>' +
+      '<b>IBAN:</b> <span style="font-family:monospace;color:#fff">' + MEEZAN_IBAN + '</span><br>' +
+      '<b>SWIFT/BIC:</b> <span style="font-family:monospace;color:#fff">' + MEEZAN_SWIFT + '</span>' +
+      '</div>' +
+      '<button type="button" class="ghost" style="padding:8px 12px!important;font-size:12px!important" onclick="navigator.clipboard.writeText(\'' + MEEZAN_IBAN + '\');this.innerText=\'✓ Meezan IBAN Copied\'">Copy Meezan IBAN</button>' +
+      '</div>' +
+
+      '<input id="pay_ref" placeholder="Wire / Payoneer Transaction Reference ID (or Invoice Request)" aria-label="Transaction Reference">' +
+      '<button id="pay_submit" type="button" class="btn" style="background:#FFD700!important;color:#000!important;font-weight:900!important">Confirm Wire / Request Enterprise Invoice →</button>' +
+      '<p id="pay_msg" style="font-size:12px;color:#ef4444;margin:8px 0 0"></p>' +
+      '</div>';
+    gm.style.display = 'flex';
+
+    document.getElementById('pay_submit').onclick = async function() {
+      const n = document.getElementById('pay_n').value.trim();
+      const c = document.getElementById('pay_c').value.trim();
+      const e = document.getElementById('pay_e').value.trim();
+      const ref = document.getElementById('pay_ref').value.trim() || 'Invoice Requested';
+      const msg = document.getElementById('pay_msg');
+
+      if (!n || !e) { msg.textContent = 'Please enter your name and corporate email.'; return; }
+      this.disabled = true;
+      this.textContent = 'Verifying & Notifying Treasury...';
+
+      try {
+        await fetch(SB_URL + '/rest/v1/globoo_leads', {
+          method: 'POST',
+          headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tier: tierTitle + ' | Ref: ' + ref, full_name: n, company: c, work_email: e })
+        });
+      } catch (err) {}
+
+      notifyInbox('💰 PAYMENT / INVOICE ALERT: ' + tierTitle + ' — ' + (c || n), {
+        Tier: tierTitle,
+        Executive_Name: n,
+        Company: c,
+        Corporate_Email: e,
+        Payment_Reference: ref
+      });
+
+      gmb.innerHTML =
+        '<div style="text-align:center;padding:14px 0">' +
+        '<p style="color:#10b981;font-size:16px;font-weight:800;margin:0 0 8px">✓ License &amp; Wire Verification Logged</p>' +
+        '<p style="color:#d4d4d8;font-size:13px;line-height:1.6">Thank you, <b>' + n + '</b> (' + (c || 'Enterprise') + '). Our Treasury &amp; Architecture Team has received your reference (<b>' + ref + '</b>) for <b>' + tierTitle + '</b> and will dispatch your cryptographic license key to <b>' + e + '</b> shortly.</p>' +
+        '</div>';
+    };
+  };
+
+  setInterval(function() {
+    document.querySelectorAll('#tiers button, button').forEach(function(b) {
+      const t = (b.innerText || '').trim();
+      if ((t.includes('4,999') || t.includes('25,000') || t.includes('Request License')) && !b.dataset.glbPay) {
+        b.dataset.glbPay = '1';
+        b.removeAttribute('onclick');
+        b.onclick = function(ev) {
+          ev.preventDefault();
+          ev.stopImmediatePropagation();
+          const isEnt = t.includes('25,000');
+          window.openPayCheckout(
+            isEnt ? 'Enterprise Global License ($25,000/mo)' : 'Self-Hosted Python SDK ($4,999/mo)',
+            isEnt ? '$25,000 / month' : '$4,999 / month'
+          );
+        };
+      }
+    });
+  }, 400);
+})();
+      </script>
 
 
 
