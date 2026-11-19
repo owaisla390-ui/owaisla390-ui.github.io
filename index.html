@@ -258,7 +258,8 @@ window.openLic = function(t) {
       '<div style="text-align:center;padding:12px 0">' +
       '<p style="color:#10b981;font-size:16px;font-weight:800;margin:0 0 8px">✓ Enterprise Request Registered</p>' +
       '<p style="color:#d4d4d8;font-size:13px;line-height:1.6;margin:0 0 14px">Thank you, <b>' + n + '</b> (' + (c || 'Enterprise') + '). Our Founder &amp; Architecture Team has logged your <b>' + t + '</b> request and will send your custom deployment blueprint to <b>' + e + '</b> within 2 hours.</p>' +
-      '<a class="btn" target="_blank" rel="noopener" style="display:inline-block;background:#FFD700!important;color:#000!important;font-weight:900!important" href="https://' + '://google.com' + encodeURIComponent('GLOBOO Enterprise License: ' + t + ' (' + c + ')') + '&body=' + encodeURIComponent('Name: ' + n + '\nCompany: ' + c + '\nWork Email: ' + e + '\nTier: ' + t) + '">Send Priority Copy via Gmail →</a>'
+      '<button type="button" class="btn" style="background:#FFD700!important;color:#000!important;font-weight:900!important" onclick="window.location.href=\'https://' + '://google.com' + encodeURIComponent('GLOBOO Enterprise License: ' + t + ' (' + c + ')') + '&body=' + encodeURIComponent('Name: ' + n + '\nCompany: ' + c + '\nWork Email: ' + e + '\nTier: ' + t) + '\'">Send Priority Copy via Gmail →</button>'
+    
 
    '</div>';
   };
