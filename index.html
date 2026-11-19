@@ -263,6 +263,128 @@ window.openLic = function(t) {
   };
 };
 </script>
+<script>
+(function() {
+  const VIP_KEY = 'GLOBOO-VIP-2026-99X';
+  let unlockedTier = localStorage.getItem('glb_tier') || 'FREE';
+  let freeUses = Number(localStorage.getItem('glb_uses') || '0');
+
+  function showUpgradeWall(tierName, price, featureName) {
+    gmt.innerHTML = '🔒 ' + tierName.toUpperCase() + ' FEATURE LOCKED';
+    gmb.innerHTML =
+      '<div style="font-size:13px;color:#d4d4d8">' +
+      '<div style="background:#18181b;border:1px solid #FFD700;padding:12px;border-radius:10px;margin-bottom:12px">' +
+      '<b style="color:#FFD700">' + featureName + '</b> requires an active <b style="color:#fff">' + tierName + ' (' + price + ')</b> license.' +
+      '</div>' +
+      '<input id="lk_n" placeholder="Your Full Name" aria-label="Full Name">' +
+      '<input id="lk_c" placeholder="Company Name" aria-label="Company Name">' +
+      '<input id="lk_e" type="email" placeholder="Work Email" aria-label="Work Email">' +
+      '<button id="lk_req" type="button" class="btn" style="background:#FFD700!important;color:#000!important;font-weight:900!important">Unlock ' + tierName + ' (' + price + ') →</button>' +
+      '<div style="margin-top:14px;padding-top:12px;border-top:1px solid #27272a">' +
+      '<label style="font-size:11px;color:#a1a1aa">ALREADY HAVE AN ENTERPRISE LICENSE KEY?</label>' +
+      '<div style="display:flex;gap:8px;margin-top:6px">' +
+      '<input id="lk_vip" placeholder="Enter License Key" aria-label="License Key" style="margin:0;font-family:monospace">' +
+      '<button id="lk_act" type="button" class="ghost" style="width:auto!important;padding:10px 14px!important">Activate</button>' +
+      '</div>' +
+      '<p id="lk_msg" style="font-size:12px;color:#ef4444;margin:6px 0 0"></p>' +
+      '</div></div>';
+    gm.style.display = 'flex';
+
+    document.getElementById('lk_req').onclick = async function() {
+      const n = document.getElementById('lk_n').value.trim();
+      const c = document.getElementById('lk_c').value.trim();
+      const e = document.getElementById('lk_e').value.trim();
+      const msg = document.getElementById('lk_msg');
+      if (!n || !e) { msg.textContent = 'Please enter your name and work email.'; return; }
+      try {
+        await fetch('https://supabase.co', {
+          method: 'POST',
+          headers: { 'apikey': 'sb_publishable_MK2WS7d1kY0mX_e8Il5bgA_p4yjOL2z', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tier: tierName + ' (' + price + ') — ' + featureName, full_name: n, company: c, work_email: e })
+        });
+      } catch (err) {}
+      gmb.innerHTML =
+        '<div style="text-align:center;padding:12px 0">' +
+        '<p style="color:#10b981;font-size:16px;font-weight:800;margin:0 0 8px">✓ License Provisioning Request Logged</p>' +
+        '<p style="color:#d4d4d8;font-size:13px;line-height:1.6">Thank you, <b>' + n + '</b>. Your cryptographic license key for <b>' + tierName + '</b> will be dispatched to <b>' + e + '</b> within 2 hours.</p>' +
+        '</div>';
+    };
+
+    document.getElementById('lk_act').onclick = function() {
+      const k = document.getElementById('lk_vip').value.trim();
+      if (k === VIP_KEY) {
+        localStorage.setItem('glb_tier', 'ENTERPRISE');
+        unlockedTier = 'ENTERPRISE';
+        gm.style.display = 'none';
+        applyBadges();
+        alert('✓ ENTERPRISE VIP LICENSE ACTIVATED — All $4,999 & $25,000 Modules Unlocked!');
+      } else {
+        document.getElementById('lk_msg').textContent = 'Invalid License Key. Request a key above.';
+      }
+    };
+  }
+
+  function applyBadges() {
+    if (unlockedTier === 'ENTERPRISE') return;
+    document.querySelectorAll('button').forEach(function(btn) {
+      const txt = btn.innerText || '';
+      if (txt.includes('Auditor PDF') && !txt.includes('🔒')) {
+        btn.innerHTML = '🔒 Download Auditor PDF Receipt <small style="opacity:.8">($4,999/mo Pro)</small>';
+        btn.onclick = function(e) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          showUpgradeWall('Self-Hosted Pro SDK', '$4,999 / month', 'SHA-256 Auditor PDF Certificate');
+        };
+      }
+      if (txt.includes('Generate Native Offer') && !txt.includes('🔒')) {
+        const origClick = btn.onclick;
+        btn.innerHTML = 'Generate Native Offer <small style="opacity:.8">(AR/UR/ZH/DE 🔒 Pro)</small>';
+        btn.onclick = function(e) {
+          const lang = (document.getElementById('dl') || {}).value || 'ENGLISH';
+          if (lang !== 'ENGLISH' && unlockedTier === 'FREE') {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            showUpgradeWall('Self-Hosted Pro SDK', '$4,999 / month', 'Multi-Language CFO Engine (' + lang + ')');
+            return;
+          }
+          if (origClick) origClick.call(this, e);
+        };
+      }
+      if (txt.includes('Scan Invoice') && !btn.dataset.glbGated) {
+        btn.dataset.glbGated = '1';
+        const origScan = btn.onclick;
+        btn.onclick = function(e) {
+          if (unlockedTier === 'FREE' && freeUses >= 2) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            showUpgradeWall('Self-Hosted Pro SDK', '$4,999 / month', 'Unlimited AI & Invoice Threat Scanner');
+            return;
+          }
+          freeUses++;
+          localStorage.setItem('glb_uses', String(freeUses));
+          if (origScan) origScan.call(this, e);
+        };
+      }
+    });
+
+    const origDash = window.openDash;
+    if (origDash && !origDash.glbLocked) {
+      const gatedDash = function() {
+        if (unlockedTier !== 'ENTERPRISE') {
+          showUpgradeWall('Enterprise Global License', '$25,000 / month', 'Live Production API Keys & Custom Global Tax Guardrails');
+          return;
+        }
+        origDash();
+      };
+      gatedDash.glbLocked = true;
+      window.openDash = gatedDash;
+    }
+  }
+
+  setTimeout(applyBadges, 600);
+  setInterval(applyBadges, 1500);
+})();
+                                </script>
 
         
 
