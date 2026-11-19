@@ -389,6 +389,7 @@ window.openLic = function(t) {
 (function() {
   const SB_URL = 'https://supabase.co';
   const SB_KEY = 'sb_publishable_MK2WS7d1kY0mX_e8Il5bgA_p4yjOL2z';
+  const W3_KEY = '561c2641-bfc8-4901-9c1d-f62ec034fbce';
   const genKey = () => {
     const a = new Uint8Array(16);
     crypto.getRandomValues(a);
@@ -398,32 +399,30 @@ window.openLic = function(t) {
   function openRegistrationForm(defaultMsg) {
     gmt.innerText = 'ENTERPRISE CLIENT REGISTRATION';
     gmb.innerHTML =
-      '<div style="font-size:13px;color:#d4d4d8">' +
+      '<form id="glb_reg_form" style="font-size:13px;color:#d4d4d8">' +
       '<p style="margin:0 0 10px;color:#a1a1aa">Register your organization to provision a live SHA-256 API key &amp; treasury firewall.</p>' +
-      '<input id="reg_name" placeholder="Full Name (e.g. John Miller)" aria-label="Full Name">' +
-      '<input id="reg_comp" placeholder="Company Name (e.g. Acme Global Corp)" aria-label="Company Name">' +
-      '<input id="reg_addr" placeholder="Office Address &amp; Country (e.g. 100 Wall St, New York, USA)" aria-label="Office Address">' +
-      '<input id="reg_mail" type="email" placeholder="Corporate Email (e.g. cfo@company.com)" aria-label="Corporate Email">' +
-      '<button id="reg_btn" type="button" class="btn" style="background:#10b981!important;color:#052e16!important;font-weight:900!important">Register &amp; Launch Workspace →</button>' +
+      '<input id="reg_name" required placeholder="Full Name (e.g. John Miller)" aria-label="Full Name">' +
+      '<input id="reg_comp" required placeholder="Company Name (e.g. Acme Global Corp)" aria-label="Company Name">' +
+      '<input id="reg_addr" required placeholder="Office Address &amp; Country (e.g. New York, USA)" aria-label="Office Address">' +
+      '<input id="reg_mail" type="email" required placeholder="Corporate Email (e.g. cfo@company.com)" aria-label="Corporate Email">' +
+      '<button id="reg_btn" type="submit" class="btn" style="background:#10b981!important;color:#052e16!important;font-weight:900!important">Register &amp; Launch Workspace →</button>' +
       '<p id="reg_msg" style="font-size:12px;color:#34d399;margin:8px 0 0">' + (defaultMsg || '') + '</p>' +
-      '</div>';
+      '</form>';
     gm.style.display = 'flex';
 
-    document.getElementById('reg_btn').onclick = async function() {
+    document.getElementById('glb_reg_form').onsubmit = async function(ev) {
+      ev.preventDefault();
       const name = document.getElementById('reg_name').value.trim();
       const comp = document.getElementById('reg_comp').value.trim();
       const addr = document.getElementById('reg_addr').value.trim();
       const mail = document.getElementById('reg_mail').value.trim();
       const msg = document.getElementById('reg_msg');
+      const btn = document.getElementById('reg_btn');
 
-      if (!name || !comp || !addr || !mail || !mail.includes('@')) {
-        msg.style.color = '#ef4444';
-        msg.textContent = 'Please complete all fields (Name, Company, Address & Work Email).';
-        return;
-      }
-
+      btn.disabled = true;
+      btn.textContent = 'Provisioning & Sending Alert...';
       msg.style.color = '#38bdf8';
-      msg.textContent = 'Provisioning cryptographic enclave & notifying GLOBOO Command...';
+      msg.textContent = 'Connecting to GLOBOO Security Vault...';
 
       const newApiKey = genKey();
       const clientData = {
@@ -432,41 +431,34 @@ window.openLic = function(t) {
         address: addr,
         email: mail,
         api_key: newApiKey,
-        max_payout: 50000,
-        registered_at: new Date().toISOString()
+        max_payout: 50000
       };
 
-      // 1. Save session locally
       localStorage.setItem('glb_reg_client', JSON.stringify(clientData));
 
-      // 2. Save to Supabase Vault (globoo_leads)
-            // 3. Send Instant Direct Email Alert to Founder Inbox (globooai@gmail.com) via Web3Forms
+      // 1. Save to Supabase Vault
+      try {
+        await fetch(SB_URL + '/rest/v1/globoo_leads', {
+          method: 'POST',
+          headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tier: 'LIVE CLIENT WORKSPACE (' + addr + ')',
+            full_name: name,
+            company: comp,
+            work_email: mail
+          })
+        });
+      } catch (e) {}
+
+      // 2. Send Direct Email Alert to globooai@gmail.com via Web3Forms
       try {
         await fetch('https://web3forms.com', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
-            access_key: '561c2641-bfc8-4901-9c1d-f62ec034fbce',
+            access_key: W3_KEY,
             subject: '🚨 NEW GLOBOO CLIENT ACTIVE: ' + comp + ' (' + name + ')',
             from_name: 'GLOBOO Enterprise Portal',
-            Client_Name: name,
-            Company: comp,
-            Office_Address: addr,
-            Corporate_Email: mail,
-            Provisioned_API_Key: newApiKey,
-            Status: 'Client actively using GLOBOO Enterprise Workspace right now'
-          })
-        });
-      } catch (e) {}
-      
-
-      // 3. Send Instant Silent Email Notification to Founder Inbox (globooai@gmail.com)
-      try {
-        await fetch('https://formsubmit.co', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            _subject: '🚨 NEW GLOBOO CLIENT ACTIVE: ' + comp + ' (' + name + ')',
             Client_Name: name,
             Company: comp,
             Office_Address: addr,
@@ -522,7 +514,7 @@ window.openLic = function(t) {
     document.getElementById('out_btn').onclick = function() {
       localStorage.removeItem('glb_reg_client');
       localStorage.removeItem('glb_sess');
-      openRegistrationForm('Signed out. Register a new enterprise profile below:');
+      openRegistrationForm('Signed out. Enter new organization details below:');
     };
   }
 
@@ -547,6 +539,7 @@ window.openLic = function(t) {
   }, 300);
 })();
 </script>
+
 
         
 
