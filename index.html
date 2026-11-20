@@ -759,6 +759,28 @@ window.openLic = function(t) {
   }
 })();
 </script>
+<script>
+(function() {
+  document.querySelectorAll('h2, h3').forEach(function(h) {
+    var txt = h.innerText || '';
+    if (txt.indexOf('ROI') !== -1 || txt.indexOf('Calculator') !== -1) {
+      h.innerHTML = 'CFO Wire-Loss &amp; Audit Exposure ROI Calculator';
+      var p = h.nextElementSibling;
+      if (p && p.tagName === 'P') {
+        p.innerHTML = 'Calculate how much erroneous AI disbursement, duplicate vendor invoice, and SOX audit exposure your treasury prevents annually—typical enterprise payback is under 14 days.';
+      }
+      var parent = h.parentElement;
+      if (parent && !document.getElementById('glb_cfo_roi_strip')) {
+        var strip = document.createElement('div');
+        strip.id = 'glb_cfo_roi_strip';
+        strip.style.cssText = 'margin-top:14px;padding:12px 14px;background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.35);border-radius:10px;font-size:12px;color:#fde68a';
+        strip.innerHTML = '<strong>Boardroom Benchmark:</strong> Preventing a single $75,000 unauthorized wire or duplicate invoice pays for a full year of GLOBOO Self-Hosted Pro ($4,999/mo) with 100% SHA-256 audit proof.';
+        parent.appendChild(strip);
+      }
+    }
+  });
+})();
+</script>
 
 
 
