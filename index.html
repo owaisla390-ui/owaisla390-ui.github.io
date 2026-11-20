@@ -836,6 +836,35 @@ window.openLic = function(t) {
   }, 400);
 })();
 </script>
+<script>
+(function() {
+  document.querySelectorAll('button').forEach(function(b) {
+    if ((b.innerText || '').indexOf('Generate Native Offer') !== -1) {
+      b.removeAttribute('onclick');
+      b.addEventListener('click', function(ev) {
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+        var box = b.closest('div') || b.parentElement;
+        var inp = box.querySelector('input');
+        var sel = box.querySelector('select');
+        var raw = Number((inp && inp.value) || 41000);
+        var total = Math.round(raw * 1.05).toLocaleString('en-US');
+        var lang = ((sel && sel.value) || 'ARABIC').toUpperCase();
+        var out = box.querySelector('p, div[id], pre') || b.nextElementSibling;
+        if (!out) return;
+        var offers = {
+          ENGLISH: 'Official Commercial Proposal: $' + total + ' USD (inclusive of 5% VAT & SHA-256 cryptographic settlement guarantee).',
+          ARABIC: 'السلام عليكم ورحمة الله وبركاته — عرضنا التجاري المعتمد بقيمة $' + total + ' دولار أمريكي (شامل ضريبة القيمة المضافة 5% والتأمين التشفيري الكامل).',
+          URDU: 'السلام علیکم — ہمارا تصدیق شدہ تجارتی معاہدہ $' + total + ' امریکی ڈالر (بشمول 5% ویلیو ایڈڈ ٹیکس اور SHA-256 کرپٹوگرافک تحفظ)۔',
+          CHINESE: '官方商业报价：$' + total + ' 美元（含 5% 增值税及 SHA-256 加密结算保障）。',
+          GERMAN: 'Offizielles Handelsangebot: $' + total + ' USD (inklusive 5 % MwSt. und kryptografischer SHA-256-Absicherung).'
+        };
+        out.innerText = offers[lang] || offers.ARABIC;
+      }, true);
+    }
+  });
+})();
+                         </script>
 
 
 
