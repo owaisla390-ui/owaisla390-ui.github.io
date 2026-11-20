@@ -1,3 +1,13 @@
+<script>
+(function() {
+  setInterval(function() {
+    var gm = document.getElementById('gm');
+    if (gm && gm.innerHTML.indexOf('W-8BEN-E') !== -1) {
+      gm.innerHTML = gm.innerHTML.replace(/W-8BEN-E/g, 'W-8BEN');
+    }
+  }, 300);
+})();
+</script>
 <!DOCTYPE html><html lang="en"><head><link rel="manifest" href="/manifest.json">
   <link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#0b192c"><meta name="apple-mobile-web-app-capable" content="yes">
   <title>GLOBOO — Zero-Loss Enterprise AI Firewall & Autonomous CFO</title><meta name="description" content="Deterministic AI execution firewall, SHA-256 audit vault, and multi-language autonomous CFO for global enterprises.">
