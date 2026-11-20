@@ -771,6 +771,21 @@ window.openLic = function(t) {
   });
 })();
 </script>
+<script>
+(function() {
+  document.querySelectorAll('pre, code').forEach(function(el) {
+    var t = el.innerText || '';
+    if (t.indexOf('GlobooKingOS') !== -1) {
+      el.innerHTML =
+        'from globoo_master_v2 import GlobooFirewall\n' +
+        'fw = GlobooFirewall(api_key="glb_live_key", max_single_usd=9500.0, allowed_ibans=["GB29NWBK60161331926819"])\n' +
+        'print(fw.evaluate(9500.0, "GB29NWBK60161331926819", "Maersk Shipping container freight settlement"))';
+    }
+  });
+  var sdk = document.getElementById('glb_sdk_sec');
+  if (sdk) sdk.innerHTML = sdk.innerHTML.replace('ISO-27001 Ready', 'ISO-27001 Aligned');
+})();
+</script>
 
 
 
