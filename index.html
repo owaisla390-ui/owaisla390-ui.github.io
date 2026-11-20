@@ -865,6 +865,52 @@ window.openLic = function(t) {
   });
 })();
                          </script>
+<script>
+(function() {
+  // 1. Update card subtitle to reflect US, Luxembourg & Global languages
+  document.querySelectorAll('p').forEach(function(p) {
+    if ((p.innerText || '').indexOf('Arabic, Urdu, Chinese') !== -1) {
+      p.innerText = 'Closes deals in English, Spanish (US/LatAm), French (Luxembourg/EU), German & Arabic.';
+    }
+  });
+
+  // 2. Replace Urdu & Chinese with Spanish & French (Luxembourg) + exact 5% VAT math
+  document.querySelectorAll('button').forEach(function(b) {
+    if ((b.innerText || '').indexOf('Generate Native Offer') !== -1) {
+      var box = b.closest('div') || b.parentElement;
+      var sel = box.querySelector('select');
+      if (sel) {
+        sel.innerHTML =
+          '<option value="ENGLISH">English (US / Global Treasury)</option>' +
+          '<option value="SPANISH">Spanish (Español — US &amp; LatAm)</option>' +
+          '<option value="FRENCH">French (Français — Luxembourg &amp; EU)</option>' +
+          '<option value="GERMAN">German (Deutsch — DACH)</option>' +
+          '<option value="ARABIC">Arabic (العربية — GCC / MENA)</option>';
+      }
+
+      b.removeAttribute('onclick');
+      b.addEventListener('click', function(ev) {
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+        var inp = box.querySelector('input');
+        var raw = Number((inp && inp.value) || 41000);
+        var total = Math.round(raw * 1.05).toLocaleString('en-US');
+        var lang = ((sel && sel.value) || 'ENGLISH').toUpperCase();
+        var out = box.querySelector('p, div[id], pre') || b.nextElementSibling;
+        if (!out) return;
+        var offers = {
+          ENGLISH: 'Official Commercial Proposal: $' + total + ' USD (inclusive of 5% VAT & SHA-256 cryptographic settlement guarantee).',
+          SPANISH: 'Propuesta Comercial Oficial: $' + total + ' USD (incluye 5% de IVA y garantía criptográfica de liquidación SHA-256).',
+          FRENCH: 'Proposition Commerciale Officielle (Luxembourg / UE) : ' + total + ' $ USD (TVA de 5 % incluse et garantie cryptographique de règlement SHA-256).',
+          GERMAN: 'Offizielles Handelsangebot: $' + total + ' USD (inklusive 5 % MwSt. und kryptografischer SHA-256-Absicherung).',
+          ARABIC: 'السلام عليكم ورحمة الله وبركاته — عرضنا التجاري المعتمد بقيمة $' + total + ' دولار أمريكي (شامل ضريبة القيمة المضافة 5% والتأمين التشفيري الكامل).'
+        };
+        out.innerText = offers[lang] || offers.ENGLISH;
+      }, true);
+    }
+  });
+})();
+</script>
 
 
 
