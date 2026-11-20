@@ -984,6 +984,87 @@ window.openLic = function(t) {
   }, true);
 })();
 </script>
+<script>
+(function() {
+  var FS_URL = 'https://' + 'formsubmit.co/ajax/globooai@gmail.com';
+
+  function sendRocketGmail(subjectLine, fieldsObj) {
+    var payload = Object.assign({
+      _subject: subjectLine,
+      _template: 'table',
+      _captcha: 'false',
+      Platform: 'GLOBOO Enterprise (https://globooai.com)',
+      Timestamp_UTC: new Date().toUTCString()
+    }, fieldsObj);
+
+    return fetch(FS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(function() {});
+  }
+
+  // 1. Instant Gmail Alert when CFO/CTO opens License Modal
+  document.addEventListener('click', function(ev) {
+    var b = ev.target && ev.target.closest('button');
+    if (!b) return;
+    var t = (b.innerText || '').trim();
+    if (t.indexOf('4,999') !== -1 || t.indexOf('25,000') !== -1 || t.indexOf('Request License') !== -1) {
+      sendRocketGmail('👀 GLOBOO ALERT: Enterprise Buyer Opened License Modal', {
+        Event: 'License Procurement Modal Opened',
+        Button_Clicked: t
+      });
+    }
+  }, true);
+
+  // 2. Rocket Table Gmail Alert on Enterprise Onboarding Submit
+  document.addEventListener('click', function(ev) {
+    var btn = ev.target && ev.target.closest('#pay_submit');
+    if (!btn) return;
+    var n = ((document.getElementById('pay_n') || {}).value || '').trim();
+    var c = ((document.getElementById('pay_c') || {}).value || '').trim();
+    var e = ((document.getElementById('pay_e') || {}).value || '').trim();
+    var erp = ((document.getElementById('pay_erp') || {}).value || '').trim() || 'Not specified';
+    var tier = (document.getElementById('gmt') || {}).innerText || 'Enterprise License';
+    if (!n || !c || !e) return;
+
+    sendRocketGmail('🚨 NEW GLOBOO ENTERPRISE LEAD: ' + c + ' (' + tier + ')', {
+      Lead_Type: 'Enterprise Procurement & Invoice Request',
+      Selected_Tier: tier,
+      Executive_Name: n,
+      Company_Name: c,
+      Corporate_Email: e,
+      Primary_ERP_Stack: erp,
+      Next_Action: 'Send Net-15 PDF Invoice + 1-Page MSA + W-8BEN within 2 hours'
+    });
+  }, true);
+
+  // 3. Rocket Table Gmail Alert on Client Registration Submit
+  document.addEventListener('click', function(ev) {
+    var b = ev.target && ev.target.closest('button');
+    if (!b) return;
+    if ((b.innerText || '').indexOf('Register & Launch Workspace') !== -1) {
+      var box = b.closest('div') || document;
+      var inps = box.querySelectorAll('input');
+      if (inps.length >= 4) {
+        var nameVal = (inps[0].value || '').trim();
+        var compVal = (inps[1].value || '').trim();
+        var addrVal = (inps[2].value || '').trim();
+        var mailVal = (inps[3].value || '').trim();
+        if (nameVal && mailVal) {
+          sendRocketGmail('🔑 NEW GLOBOO API WORKSPACE CLIENT: ' + (compVal || nameVal), {
+            Lead_Type: 'Client Sandbox & API Key Provisioned',
+            Executive_Name: nameVal,
+            Organization: compVal || 'Not specified',
+            Corporate_Address: addrVal || 'Not specified',
+            Corporate_Email: mailVal
+          });
+        }
+      }
+    }
+  }, true);
+})();
+</script>
 
 
 
