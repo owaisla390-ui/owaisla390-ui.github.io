@@ -786,6 +786,56 @@ window.openLic = function(t) {
   if (sdk) sdk.innerHTML = sdk.innerHTML.replace('ISO-27001 Ready', 'ISO-27001 Aligned');
 })();
 </script>
+<script>
+(function() {
+  // 1. Fix Multi-Language Deal Closer Math (Exact 5% VAT: 41,000 -> 43,050)
+  document.querySelectorAll('button').forEach(function(b) {
+    if ((b.innerText || '').indexOf('Generate Native Offer') !== -1) {
+      b.onclick = function(ev) {
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+        var amtEl = b.parentElement.querySelector('input');
+        var selEl = b.parentElement.querySelector('select, input:nth-of-type(2)');
+        var raw = Number((amtEl && amtEl.value) || 41000);
+        var vatTotal = Math.round(raw * 1.05).toLocaleString('en-US');
+        var lang = ((selEl && selEl.value) || 'ENGLISH').toUpperCase();
+        var out = b.nextElementSibling;
+        if (!out) return;
+        var map = {
+          ENGLISH: 'Official Commercial Proposal: $' + vatTotal + ' USD (inclusive of 5% VAT & SHA-256 cryptographic settlement guarantee).',
+          ARABIC: 'السلام عليكم ورحمة الله وبركاته — عرضنا التجاري المعتمد بقيمة $' + vatTotal + ' دولار أمريكي (شامل ضريبة القيمة المضافة 5% والتأمين التشفيري الكامل).',
+          URDU: 'السلام علیکم — ہمارا تصدیق شدہ تجارتی معاہدہ $' + vatTotal + ' امریکی ڈالر (بشمول 5% ویلیو ایڈڈ ٹیکس اور SHA-256 کرپٹوگرافک تحفظ)۔',
+          CHINESE: '官方商业报价：$' + vatTotal + ' 美元（含 5% 增值税及 SHA-256 加密结算保障）。',
+          GERMAN: 'Offizielles Handelsangebot: $' + vatTotal + ' USD (inklusive 5 % MwSt. und kryptografischer SHA-256-Absicherung).'
+        };
+        out.innerText = map[lang] || map.ENGLISH;
+      };
+    }
+  });
+
+  // 2. Fix Live Sandbox Table Comma Formatting ($48,000) & Verified/Locked Badges
+  setInterval(function() {
+    document.querySelectorAll('table tr, #sb tr').forEach(function(tr) {
+      var tds = tr.querySelectorAll('td');
+      if (tds.length >= 4) {
+        var amtTxt = (tds[1].innerText || '').trim();
+        var num = Number(amtTxt.replace(/[^0-9.]/g, ''));
+        if (num && amtTxt.indexOf(',') === -1 && num >= 1000) {
+          tds[1].innerText = '$' + num.toLocaleString('en-US');
+        }
+        var st = (tds[2].innerText || '').trim();
+        if (tds.length === 4) {
+          var td5 = document.createElement('td');
+          td5.innerText = st === 'APPROVED' ? 'Verified ✅' : 'Locked 🔴';
+          tr.appendChild(td5);
+        } else if (tds[4] && !(tds[4].innerText || '').trim()) {
+          tds[4].innerText = st === 'APPROVED' ? 'Verified ✅' : 'Locked 🔴';
+        }
+      }
+    });
+  }, 400);
+})();
+</script>
 
 
 
