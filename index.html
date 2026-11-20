@@ -1,81 +1,3 @@
-<script><script>
-(function() {
-  var SB_URL = 'https://supabase.co';
-  var SB_KEY = 'sb_publishable_MK2WS7d1kY0mX_e8Il5bgA_p4yjOL2z';
-  var W3_KEY = '561c2641-bfc8-4901-9c1d-f62ec034fbce';
-
-  // Safe text-only W-8BEN update (never destroys button clicks)
-  setInterval(function() {
-    var gmb = document.getElementById('gmb');
-    if (gmb) {
-      var firstBox = gmb.querySelector('div');
-      if (firstBox && firstBox.innerHTML.indexOf('W-8BEN-E') !== -1) {
-        firstBox.innerHTML = firstBox.innerHTML.replace(/W-8BEN-E/g, 'W-8BEN');
-      }
-    }
-  }, 400);
-
-  // Bulletproof global click handler for Enterprise Onboarding Submit button
-  document.addEventListener('click', async function(ev) {
-    var btn = ev.target && ev.target.closest('#pay_submit');
-    if (!btn) return;
-    ev.preventDefault();
-    ev.stopImmediatePropagation();
-
-    var n = (document.getElementById('pay_n') || {}).value || '';
-    var c = (document.getElementById('pay_c') || {}).value || '';
-    var e = (document.getElementById('pay_e') || {}).value || '';
-    var erp = (document.getElementById('pay_erp') || {}).value || 'Not specified';
-    var msg = document.getElementById('pay_msg');
-    var tierTitle = (document.getElementById('gmt') || {}).innerText || 'Enterprise License';
-
-    n = n.trim(); c = c.trim(); e = e.trim(); erp = erp.trim() || 'Not specified';
-    if (!n || !c || !e) {
-      if (msg) msg.textContent = 'Please enter your full name, company name, and corporate email.';
-      return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Generating Procurement Packet...';
-
-    try {
-      await fetch(SB_URL + '/rest/v1/globoo_leads', {
-        method: 'POST',
-        headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tier: tierTitle + ' | Stack: ' + erp, full_name: n, company: c, work_email: e })
-      });
-    } catch (err) {}
-
-    try {
-      await fetch('https://web3forms.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          access_key: W3_KEY,
-          subject: '🚨 NEW ENTERPRISE PROCUREMENT REQUEST: ' + c + ' (' + tierTitle + ')',
-          from_name: 'GLOBOO Enterprise Desk',
-          Selected_Tier: tierTitle,
-          Executive_Name: n,
-          Company: c,
-          Corporate_Email: e,
-          Primary_Stack: erp
-        })
-      });
-    } catch (err) {}
-
-    var gmb = document.getElementById('gmb');
-    if (gmb) {
-      gmb.innerHTML =
-        '<div style="text-align:center;padding:14px 0">' +
-        '<p style="color:#10b981;font-size:16px;font-weight:800;margin:0 0 8px">✓ Enterprise Procurement Request Registered</p>' +
-        '<p style="color:#d4d4d8;font-size:13px;line-height:1.6">Thank you, <b>' + n + '</b>. Our enterprise desk has received your request for <b>' + c + '</b>. Your official <b>Net-15 Invoice</b> (with Wire/ACH instructions), <b>MSA</b>, and <b>W-8BEN</b> tax packet will be delivered to <b>' + e + '</b> within 2 hours.</p>' +
-        '</div>';
-    }
-  }, true);
-})();
-</script>
-
-</script>
 <!DOCTYPE html><html lang="en"><head><link rel="manifest" href="/manifest.json">
   <link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#0b192c"><meta name="apple-mobile-web-app-capable" content="yes">
   <title>GLOBOO — Zero-Loss Enterprise AI Firewall & Autonomous CFO</title><meta name="description" content="Deterministic AI execution firewall, SHA-256 audit vault, and multi-language autonomous CFO for global enterprises.">
@@ -987,6 +909,79 @@ window.openLic = function(t) {
       }, true);
     }
   });
+})();
+</script>
+<script>
+(function() {
+  var SB_URL = 'https://' + 'lkqkmloytntwyxozokrd.supabase.co';
+  var SB_KEY = 'sb_publishable_MK2WS7d1kY0mX_e8Il5bgA_p4yjOL2z';
+  var W3_KEY = '561c2641-bfc8-4901-9c1d-f62ec034fbce';
+
+  setInterval(function() {
+    var gmb = document.getElementById('gmb');
+    if (gmb) {
+      var firstBox = gmb.querySelector('div');
+      if (firstBox && firstBox.innerHTML.indexOf('W-8BEN-E') !== -1) {
+        firstBox.innerHTML = firstBox.innerHTML.replace(/W-8BEN-E/g, 'W-8BEN');
+      }
+    }
+  }, 400);
+
+  document.addEventListener('click', async function(ev) {
+    var btn = ev.target && ev.target.closest('#pay_submit');
+    if (!btn) return;
+    ev.preventDefault();
+    ev.stopImmediatePropagation();
+
+    var n = ((document.getElementById('pay_n') || {}).value || '').trim();
+    var c = ((document.getElementById('pay_c') || {}).value || '').trim();
+    var e = ((document.getElementById('pay_e') || {}).value || '').trim();
+    var erp = ((document.getElementById('pay_erp') || {}).value || '').trim() || 'Not specified';
+    var msg = document.getElementById('pay_msg');
+    var tierTitle = (document.getElementById('gmt') || {}).innerText || 'Enterprise License';
+
+    if (!n || !c || !e) {
+      if (msg) msg.textContent = 'Please enter your full name, company name, and corporate email.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Generating Procurement Packet...';
+
+    try {
+      await fetch(SB_URL + '/rest/v1/globoo_leads', {
+        method: 'POST',
+        headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tier: tierTitle + ' | Stack: ' + erp, full_name: n, company: c, work_email: e })
+      });
+    } catch (err) {}
+
+    try {
+      await fetch('https://' + '://web3forms.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          access_key: W3_KEY,
+          subject: '🚨 NEW ENTERPRISE PROCUREMENT REQUEST: ' + c + ' (' + tierTitle + ')',
+          from_name: 'GLOBOO Enterprise Desk',
+          Selected_Tier: tierTitle,
+          Executive_Name: n,
+          Company: c,
+          Corporate_Email: e,
+          Primary_Stack: erp
+        })
+      });
+    } catch (err) {}
+
+    var gmb = document.getElementById('gmb');
+    if (gmb) {
+      gmb.innerHTML =
+        '<div style="text-align:center;padding:14px 0">' +
+        '<p style="color:#10b981;font-size:16px;font-weight:800;margin:0 0 8px">✓ Enterprise Procurement Request Registered</p>' +
+        '<p style="color:#d4d4d8;font-size:13px;line-height:1.6">Thank you, <b>' + n + '</b>. Our enterprise desk has received your request for <b>' + c + '</b>. Your official <b>Net-15 Invoice</b> (with Wire/ACH instructions), <b>MSA</b>, and <b>W-8BEN</b> tax packet will be delivered to <b>' + e + '</b> within 2 hours.</p>' +
+        '</div>';
+    }
+  }, true);
 })();
 </script>
 
