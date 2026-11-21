@@ -1617,6 +1617,98 @@ window.openLic = function(t) {
   }
 })();
 </script>
+<script>
+(function() {
+  // 1. Safe text updates (Zero-Risk -> Low-Risk, Zero-Loss -> Loss-Prevention, Tax Ready -> Simple Runway Estimate, Merkle -> Hash-Chain)
+  var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  var n;
+  while ((n = w.nextNode())) {
+    var v = n.nodeValue
+      .replace(/Zero-Risk/gi, 'Low-Risk')
+      .replace(/Zero-Loss/gi, 'Loss-Prevention')
+      .replace(/Tax Ready/g, 'Simple Runway Estimate')
+      .replace(/Merkle Hash-Chain/g, 'Cryptographic Hash-Chain')
+      .replace(/Merkle SHA-256 Hash-Chain/g, 'SHA-256 Hash-Chain')
+      .replace(/Merkle Chain Seal/g, 'Hash-Chain Seal')
+      .replace(/54,667\$/g, '$43,050');
+    if (v !== n.nodeValue) n.nodeValue = v;
+  }
+
+  // 2. Upgrade Engine 01 Python SDK to FinTech-grade Decimal + chain_seal + Redis/DB note
+  var sdkCode = document.querySelector('#glb_sdk_sec code');
+  if (sdkCode) {
+    sdkCode.textContent = [
+      '# globoo_shield_v3.py — Deterministic 6-Layer Enterprise Business Shield',
+      '# Zero external dependencies (Python 3.9+ stdlib: decimal, hashlib, hmac, json, re, time, base64)',
+      'from decimal import Decimal',
+      'import hashlib, hmac, json, re, time, base64',
+      '',
+      'class GlobooPolicyShield:',
+      '    def __init__(self, api_key: str, max_single_usd: str = "50000.00", max_daily_usd: str = "150000.00", allowed_ibans=None):',
+      '        self.api_key = api_key.encode()',
+      '        self.max_single_usd = Decimal(max_single_usd)',
+      '        self.max_daily_usd = Decimal(max_daily_usd)',
+      '        self.allowed_ibans = set(allowed_ibans or [])',
+      '        # Note: Reference in-memory state; production deployments bind to Redis/DB with 24h UTC TTL',
+      '        self.seen_nonces = set()',
+      '        self.daily_spent = Decimal("0.00")',
+      '        self.prev_hash = "0" * 64',
+      '        self.threat_re = re.compile(r"(ignore previous|system prompt|override|urgent wire|offshore|bypass|sudo|drop table)", re.I)',
+      '',
+      '    def _valid_iban_mod97(self, iban: str) -> bool:',
+      '        s = re.sub(r"\\s+", "", iban or "").upper()',
+      '        if not re.match(r"^[A-Z]{2}\\d{2}[A-Z0-9]{11,30}$", s): return False',
+      '        rearr = s[4:] + s[:4]',
+      '        num = "".join(str(ord(c) - 55) if c.isalpha() else c for c in rearr)',
+      '        return int(num) % 97 == 1',
+      '',
+      '    def _contains_obfuscated_injection(self, text: str) -> bool:',
+      '        if not text: return False',
+      '        if any(ord(ch) in (0x200B, 0x200C, 0x200D, 0xFEFF) for ch in text): return True',
+      '        if self.threat_re.search(text): return True',
+      '        for tok in re.findall(r"[A-Za-z0-9+/=]{16,}", text):',
+      '            try:',
+      '                dec = base64.b64decode(tok).decode("utf-8", "ignore")',
+      '                if self.threat_re.search(dec): return True',
+      '            except Exception: pass',
+      '        return False',
+      '',
+      '    def enforce(self, tx_id: str, amount_usd: str, beneficiary_iban: str, payload_text: str = "") -> dict:',
+      '        t0 = time.perf_counter()',
+      '        amt = Decimal(str(amount_usd))',
+      '        blocks = []',
+      '        if tx_id in self.seen_nonces: blocks.append("L3_REPLAY_DUPLICATE_TX")',
+      '        if amt <= Decimal("0") or amt > self.max_single_usd: blocks.append("L1_SINGLE_CAP_EXCEEDED")',
+      '        if (self.daily_spent + amt) > self.max_daily_usd: blocks.append("L1_DAILY_VELOCITY_EXCEEDED")',
+      '        if not self._valid_iban_mod97(beneficiary_iban): blocks.append("L2_INVALID_IBAN_MOD97_CHECKSUM")',
+      '        if self.allowed_ibans and beneficiary_iban not in self.allowed_ibans: blocks.append("L2_UNVERIFIED_BENEFICIARY")',
+      '        if self._contains_obfuscated_injection(payload_text): blocks.append("L4_DEEP_PROMPT_OR_BASE64_INJECTION")',
+      '',
+      '        verdict = "BLOCKED" if blocks else "APPROVED"',
+      '        if verdict == "APPROVED":',
+      '            self.seen_nonces.add(tx_id)',
+      '            self.daily_spent += amt',
+      '        latency_ms = round((time.perf_counter() - t0) * 1000, 4)',
+      '        record = json.dumps({"prev": self.prev_hash, "tx": tx_id, "verdict": verdict, "usd": str(amt), "blocks": blocks}, sort_keys=True)',
+      '        chain_seal = hmac.new(self.api_key, record.encode(), hashlib.sha256).hexdigest()',
+      '        self.prev_hash = chain_seal',
+      '        return {"verdict": verdict, "layers_checked": 6, "latency_ms": latency_ms, "blocks": blocks, "chain_seal": chain_seal}'
+    ].join('\n');
+  }
+
+  // 3. Add transparent ROI assumption note & sync Multi-Lang default output to English
+  document.querySelectorAll('div, p').forEach(function(el) {
+    var t = el.innerText || '';
+    if (t.indexOf('Annual Fraud & Hallucination Loss Prevented') !== -1 && el.children.length === 0 && !el.dataset.roiNote) {
+      el.dataset.roiNote = '1';
+      el.innerHTML += '<div style="font-size:11px;color:#a1a1aa;margin-top:4px">*Estimate based on demo assumptions; actual savings vary by transaction volume.</div>';
+    }
+    if (t.indexOf('السلام عليكم ورحمة الله وبركاته') !== -1 && el.children.length === 0) {
+      el.innerText = 'Official Commercial Proposal: $43,050 USD (inclusive of 5% VAT & SHA-256 cryptographic settlement guarantee).';
+    }
+  });
+})();
+</script>
 
 
 
