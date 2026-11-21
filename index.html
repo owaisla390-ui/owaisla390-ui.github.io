@@ -1552,6 +1552,24 @@ window.openLic = function(t) {
   if (hdr) hdr.style.paddingTop = '52px';
 })();
 </script>
+<script>
+(function() {
+  document.querySelectorAll('span').forEach(function(s) {
+    if (s.dataset && s.dataset.aiDone === '1') {
+      var box = s.parentElement;
+      if (box) {
+        box.style.display = 'inline-flex';
+        box.style.alignItems = 'center';
+        var svg = box.querySelector('svg, img');
+        if (svg) {
+          svg.style.marginTop = '6px';
+          svg.style.alignSelf = 'center';
+        }
+      }
+    }
+  });
+})();
+</script>
 
 
 
