@@ -1498,6 +1498,31 @@ window.openLic = function(t) {
   });
 })();
       </script>
+<script>
+(function() {
+  var oldBtn = document.getElementById('glb_ham_btn');
+  if (oldBtn) {
+    var cleanBtn = document.createElement('div');
+    cleanBtn.id = 'glb_ham_btn';
+    cleanBtn.setAttribute('role', 'button');
+    cleanBtn.setAttribute('aria-label', 'Menu');
+    cleanBtn.style.cssText = 'position:fixed!important;top:14px!important;left:12px!important;z-index:9998!important;width:34px!important;height:34px!important;min-width:34px!important;max-width:34px!important;border-radius:8px!important;background:rgba(15,23,42,.92)!important;border:1px solid rgba(255,255,255,.18)!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:4px!important;cursor:pointer!important;box-sizing:border-box!important;padding:0!important';
+    cleanBtn.innerHTML =
+      '<span style="display:block;width:16px;height:1.8px;background:#e2e8f0;border-radius:2px"></span>' +
+      '<span style="display:block;width:16px;height:1.8px;background:#e2e8f0;border-radius:2px"></span>' +
+      '<span style="display:block;width:16px;height:1.8px;background:#e2e8f0;border-radius:2px"></span>';
+    oldBtn.parentNode.replaceChild(cleanBtn, oldBtn);
+    cleanBtn.onclick = function() {
+      var d = document.getElementById('glb_drawer_bg');
+      if (d) d.style.display = 'block';
+    };
+  }
+  var xBtn = document.getElementById('glb_drawer_x');
+  if (xBtn) {
+    xBtn.style.cssText = 'width:30px!important;min-width:30px!important;max-width:30px!important;height:30px!important;padding:0!important;background:#18181b!important;border:1px solid #27272a!important;color:#a1a1aa!important;border-radius:8px!important;display:flex!important;align-items:center!important;justify-content:center!important;cursor:pointer!important';
+  }
+})();
+</script>
 
 
 
