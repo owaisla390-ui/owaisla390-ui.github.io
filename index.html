@@ -1876,6 +1876,22 @@ window.openLic = function(t) {
   });
 })();
 </script>
+<script>
+(function() {
+  setTimeout(function() {
+    document.querySelectorAll('td').forEach(function(td) {
+      var t = (td.textContent || '').trim();
+      if (t === 'Pilot Flying J') td.textContent = 'Demo Fuel Co.';
+      if (t === 'Maersk Shipping') td.textContent = 'Demo Shipping Co.';
+    });
+    document.querySelectorAll('div, p').forEach(function(el) {
+      if ((el.textContent || '').indexOf('54,667$') !== -1 && el.children.length === 0) {
+        el.textContent = 'Official Commercial Proposal: $43,050 USD (Base $41,000 + 5% VAT = $43,050 | SHA-256 settlement guarantee).';
+      }
+    });
+  }, 500);
+})();
+</script>
 
 
 
