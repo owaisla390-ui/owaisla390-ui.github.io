@@ -1544,6 +1544,14 @@ window.openLic = function(t) {
   });
 })();
 </script>
+<script>
+(function() {
+  var btn = document.getElementById('glb_ham_btn');
+  if (btn) { btn.style.top = '6px'; btn.style.left = '12px'; }
+  var hdr = document.querySelector('header, nav, body > div:first-child');
+  if (hdr) hdr.style.paddingTop = '52px';
+})();
+</script>
 
 
 
