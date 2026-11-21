@@ -1594,6 +1594,29 @@ window.openLic = function(t) {
   });
 })();
 </script>
+<script>
+(function() {
+  var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  var n;
+  while ((n = w.nextNode())) {
+    var v = n.nodeValue
+      .replace(/Deterministic Deterministic/g, 'Deterministic')
+      .replace(/Test Zero-Loss Firewall live\./g, 'Test Deterministic Firewall live.')
+      .replace(/54,667\$/g, '$43,050')
+      .replace(/Download Auditor PDF Receipt/g, 'Download Sample Sandbox Receipt (Demo)');
+    if (v !== n.nodeValue) n.nodeValue = v;
+  }
+  var orcBtn = document.getElementById('orc_run');
+  if (orcBtn) {
+    orcBtn.addEventListener('click', function() {
+      setTimeout(function() {
+        var out = document.getElementById('orc_out');
+        if (out) out.innerHTML = out.innerHTML.replace(/Confidence:\s*9[0-9]\.[0-9]%/g, 'Mode: Heuristic Scenario Simulation');
+      }, 600);
+    });
+  }
+})();
+</script>
 
 
 
