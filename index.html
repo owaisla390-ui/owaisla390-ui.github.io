@@ -1523,6 +1523,27 @@ window.openLic = function(t) {
   }
 })();
 </script>
+<script>
+(function() {
+  var btn = document.getElementById('glb_ham_btn');
+  if (btn) {
+    btn.style.top = '10px';
+    btn.style.left = '12px';
+  }
+  var hdr = document.querySelector('header, nav, body > div:first-child');
+  if (hdr) hdr.style.paddingTop = '42px';
+
+  document.querySelectorAll('header *, nav *, body > div:first-child *').forEach(function(el) {
+    if (el.children.length === 0 && (el.textContent || '').trim() === 'GLOBOO' && !el.dataset.aiDone) {
+      el.dataset.aiDone = '1';
+      el.style.display = 'inline-flex';
+      el.style.flexDirection = 'column';
+      el.style.lineHeight = '1.05';
+      el.innerHTML = '<span>GLOBOO</span><span style="font-size:10px;font-weight:900;letter-spacing:.32em;color:#FFD700;margin-top:2px">AI</span>';
+    }
+  });
+})();
+</script>
 
 
 
