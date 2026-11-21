@@ -1570,6 +1570,30 @@ window.openLic = function(t) {
   });
 })();
 </script>
+<script>
+(function() {
+  var rules = [
+    [/100% ZERO-MISTAKE/gi, 'DETERMINISTIC POLICY'],
+    [/100% Zero-Mistake/gi, 'Deterministic Policy'],
+    [/Zero-Loss Execution Firewall/g, 'Deterministic Execution Guardrail'],
+    [/Zero-Loss Lock/g, 'Deterministic Policy Lock'],
+    [/in 0\.04ms\./g, 'in ~0.04ms p50 local CPU compute (network hop separate).'],
+    [/Confidence: 9[0-9]\.[0-9]%/g, 'Mode: Heuristic Scenario Simulation']
+  ];
+  var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  var node;
+  while ((node = w.nextNode())) {
+    var val = node.nodeValue;
+    rules.forEach(function(r) { val = val.replace(r[0], r[1]); });
+    if (val !== node.nodeValue) node.nodeValue = val;
+  }
+  document.querySelectorAll('button').forEach(function(b) {
+    if ((b.innerText || '').indexOf('Certificate') !== -1) {
+      b.innerText = 'Download Sample Sandbox Receipt (Demo)';
+    }
+  });
+})();
+</script>
 
 
 
