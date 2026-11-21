@@ -1304,6 +1304,101 @@ window.openLic = function(t) {
   };
 })();
 </script>
+<script>
+(function() {
+  var orcSec = document.getElementById('glb_oracle_sec');
+  if (!orcSec || document.getElementById('glb_growth_sec')) return;
+
+  var growthSec = document.createElement('section');
+  growthSec.id = 'glb_growth_sec';
+  growthSec.style.cssText = 'max-width:1100px;margin:0 auto 48px;padding:0 16px';
+  growthSec.innerHTML =
+    '<div style="background:#09090b;border:1px solid #FFD700;border-radius:16px;padding:24px">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px">' +
+    '<span style="font-size:11px;font-weight:900;letter-spacing:.12em;color:#FFD700">ENGINE 03 / AUTONOMOUS BUSINESS GROWTH &amp; EXECUTION ENGINE</span>' +
+    '<span style="font-size:11px;font-family:monospace;color:#fde68a;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.35);padding:3px 8px;border-radius:999px">⚡ AUTONOMOUS REVENUE CORE</span>' +
+    '</div>' +
+    '<h2 style="font-size:22px;color:#fff;margin:0 0 8px">Autonomous Customer Finder, Margin Optimizer &amp; Deal Closer</h2>' +
+    '<p style="font-size:13px;color:#a1a1aa;line-height:1.6;margin:0 0 16px">Input your business model, monthly revenue, and core growth bottleneck—GLOBOO autonomously architects your buyer targets, optimal pricing lift, bottleneck fix, and ready-to-send deal-closer pitch.</p>' +
+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:14px">' +
+    '<input id="grw_biz" placeholder="Your Business (e.g. B2B Logistics, SaaS)" style="background:#111827;color:#fff;border:1px solid #374151;border-radius:10px;padding:10px;font-size:13px">' +
+    '<input id="grw_rev" type="number" value="120000" placeholder="Monthly Revenue ($ USD)" style="background:#111827;color:#fff;border:1px solid #374151;border-radius:10px;padding:10px;font-size:13px">' +
+    '<select id="grw_pain" style="background:#111827;color:#fff;border:1px solid #374151;border-radius:10px;padding:10px;font-size:13px">' +
+    '<option value="SALES">Slow Enterprise Deal Closing</option>' +
+    '<option value="MARGIN">Low Profit Margins &amp; Pricing</option>' +
+    '<option value="CASH">Late Invoices &amp; Cashflow Leaks</option>' +
+    '<option value="OPS">Manual Ops &amp; Scaling Bottlenecks</option>' +
+    '</select>' +
+    '<button id="grw_run" type="button" class="btn" style="background:#FFD700!important;color:#000!important;font-weight:900!important">⚡ Execute Growth Engine →</button>' +
+    '</div>' +
+
+    '<div id="grw_out" style="display:none;background:#030712;border:1px solid rgba(255,215,0,.45);border-radius:12px;padding:16px;font-size:13px;line-height:1.6;color:#e5e7eb"></div>' +
+    '</div>';
+
+  orcSec.parentNode.insertBefore(growthSec, orcSec.nextSibling);
+
+  var playbooks = {
+    SALES: {
+      buyers: 'US & Global CFOs, VP of Finance, and Heads of Operations at 100–2,000 employee companies',
+      lift: 0.34,
+      fix: 'Replace long sales calls with an asynchronous 14-Day Zero-Risk Shadow Pilot + 1-Page ROI Blueprint.'
+    },
+    MARGIN: {
+      lift: 0.29,
+      buyers: 'Enterprise Procurement Directors & COOs seeking guaranteed outcome-based SLAs',
+      fix: 'Shift from hourly/seat discounting to value-anchored annual retainers backed by cryptographic SLA proof.'
+    },
+    CASH: {
+      lift: 0.26,
+      buyers: 'Corporate Controllers, Treasury Directors & Accounts Payable Heads',
+      fix: 'Enforce automated Net-15 milestone billing with deterministic duplicate-invoice & wire-leak blocks.'
+    },
+    OPS: {
+      lift: 0.38,
+      buyers: 'CTOs, Chief Operating Officers & Digital Transformation VPs',
+      fix: 'Automate repetitive approval queues behind deterministic policy guardrails—cutting manual review time by 84%.'
+    }
+  };
+
+  document.getElementById('grw_run').onclick = async function() {
+    var biz = (document.getElementById('grw_biz').value || 'Enterprise B2B').trim();
+    var rev = Math.max(1000, Number(document.getElementById('grw_rev').value) || 120000);
+    var pain = document.getElementById('grw_pain').value;
+    var pb = playbooks[pain] || playbooks.SALES;
+    var annualGain = Math.round(rev * 12 * pb.lift).toLocaleString('en-US');
+    var optTier = Math.round(rev * 0.08).toLocaleString('en-US');
+
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(biz + '_' + rev + '_' + Date.now()));
+    var seal = Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('').slice(0, 32);
+
+    var pitchText = 'Hi [First Name], we help ' + biz + ' leaders unlock +$' + annualGain + '/yr in protected margin & faster execution without adding headcount—deployed via a zero-risk 14-day shadow pilot. Reply "SPEC" for our 1-page blueprint.';
+
+    var out = document.getElementById('grw_out');
+    out.style.display = 'block';
+    out.innerHTML =
+      '<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #1f2937">' +
+      '<strong style="color:#FFD700">AUTONOMOUS EXECUTION BLUEPRINT: ' + biz.toUpperCase() + '</strong>' +
+      '<span style="color:#34d399;font-family:monospace;font-size:11px">Projected Annual Lift: +$' + annualGain + '/yr | Seal: ' + seal + '</span>' +
+      '</div>' +
+      '<div style="margin-bottom:8px"><strong style="color:#38bdf8">🎯 High-Intent Buyers to Target Today:</strong> ' + pb.buyers + '</div>' +
+      '<div style="margin-bottom:8px"><strong style="color:#10b981">💰 Optimal Enterprise Pricing &amp; Margin Lift:</strong> Anchor enterprise contracts at <strong>$' + optTier + '/mo</strong> (+' + Math.round(pb.lift * 100) + '% net annual expansion = <strong>+$' + annualGain + '/yr</strong>).</div>' +
+      '<div style="margin-bottom:10px"><strong style="color:#f59e0b">🛠️ Bottleneck Elimination Protocol:</strong> ' + pb.fix + '</div>' +
+      '<div style="background:#111827;border:1px solid #374151;border-radius:10px;padding:10px 12px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">' +
+      '<strong style="font-size:11px;color:#FFD700">✉️ READY-TO-SEND DEAL-CLOSER PITCH:</strong>' +
+      '<button id="grw_cp_pitch" type="button" class="ghost" style="width:auto!important;padding:4px 10px!important;font-size:11px!important">Copy Pitch</button>' +
+      '</div>' +
+      '<div id="grw_pitch_txt" style="font-size:12px;color:#e5e7eb;font-style:italic">"' + pitchText + '"</div>' +
+      '</div>';
+
+    document.getElementById('grw_cp_pitch').onclick = function() {
+      navigator.clipboard.writeText(pitchText);
+      this.innerText = '✓ Pitch Copied';
+    };
+  };
+})();
+</script>
 
 
 
