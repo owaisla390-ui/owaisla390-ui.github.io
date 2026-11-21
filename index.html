@@ -1845,6 +1845,37 @@ window.openLic = function(t) {
   }
 })();
     </script>
+<script>
+(function() {
+  // 1. Fix Engine 01 Heading (remove accidental Python code dump inside h2)
+  var h2 = document.querySelector('#glb_sdk_sec h2');
+  if (h2) {
+    h2.innerHTML = '6-Layer Mathematical Execution Engine (<code style="color:#34d399">globoo_shield_v3.py</code>)';
+  }
+
+  // 2. Clean remaining Maersk / Pilot Flying J in inputs & table cells
+  document.querySelectorAll('input').forEach(function(inp) {
+    if ((inp.value || '').indexOf('Maersk') !== -1) inp.value = 'Demo Shipping Co.';
+  });
+  document.querySelectorAll('td').forEach(function(td) {
+    var t = (td.textContent || '').trim();
+    if (t === 'Pilot Flying J') td.textContent = 'Demo Fuel Co.';
+    if (t === 'Maersk Shipping') td.textContent = 'Demo Shipping Co.';
+  });
+
+  // 3. Fix Default Multi-Lang Closer Text ($43,050 English) & ROI Disclaimer
+  document.querySelectorAll('div, p').forEach(function(el) {
+    var txt = (el.textContent || '').trim();
+    if (txt.indexOf('54,667$') !== -1 && el.children.length === 0) {
+      el.textContent = 'Official Commercial Proposal: $43,050 USD (Base $41,000 + 5% VAT = $43,050 | SHA-256 settlement guarantee).';
+    }
+    if (txt.indexOf('Annual Fraud & Hallucination Loss Prevented') !== -1 && el.children.length === 0 && !el.dataset.roiOk) {
+      el.dataset.roiOk = '1';
+      el.innerHTML += '<div style="font-size:11px;color:#a1a1aa;margin-top:4px">*Estimate based on 3.8% annual treasury leakage benchmark; not guaranteed.</div>';
+    }
+  });
+})();
+</script>
 
 
 
