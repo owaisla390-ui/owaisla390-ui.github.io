@@ -1402,8 +1402,6 @@ window.openLic = function(t) {
 <script>
 (function() {
   if (document.getElementById('glb_nav_wrap')) return;
-
-  // 1. Add crisp "AI" label right underneath the GLOBOO logo
   document.querySelectorAll('header a, nav a, header div, header span').forEach(function(el) {
     if ((el.innerText || '').trim() === 'GLOBOO' && !el.dataset.aiTagged) {
       el.dataset.aiTagged = '1';
@@ -1413,140 +1411,93 @@ window.openLic = function(t) {
       el.innerHTML = '<span>GLOBOO</span><span style="font-size:10px;font-weight:900;letter-spacing:.28em;color:#FFD700;margin-top:2px">AI</span>';
     }
   });
-
-  // 2. Top-Left Sleek Three-Lines (☰) Hamburger Button
   var wrap = document.createElement('div');
   wrap.id = 'glb_nav_wrap';
   wrap.innerHTML =
-    '<button id="glb_ham_btn" type="button" aria-label="Menu" style="position:fixed;top:12px;left:12px;z-index:9998;width:36px;height:36px;border-radius:10px;background:rgba(9,9,11,.92);border:1px solid rgba(255,215,0,.45);color:#FFD700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 16px rgba(0,0,0,.5)">' +
-    '<span style="width:16px;height:2px;background:#FFD700;border-radius:2px"></span>' +
-    '<span style="width:16px;height:2px;background:#38bdf8;border-radius:2px"></span>' +
-    '<span style="width:16px;height:2px;background:#FFD700;border-radius:2px"></span>' +
-    '</button>' +
-
-    '<div id="glb_drawer_bg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:9999;backdrop-filter:blur(4px)">' +
-    '<div style="width:295px;max-width:84vw;height:100%;background:#09090b;border-right:1px solid #27272a;padding:18px 16px;overflow-y:auto;display:flex;flex-direction:column;justify-content:space-between">' +
-    '<div>' +
-    '<div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid #1f2937;margin-bottom:14px">' +
-    '<div><div style="font-weight:900;font-size:16px;color:#fff;letter-spacing:.06em">GLOBOO <span style="color:#FFD700">AI</span></div><div style="font-size:10px;color:#34d399;font-family:monospace">ZERO-TRUST ENTERPRISE OS</div></div>' +
-    '<button id="glb_drawer_x" type="button" style="background:#18181b;border:1px solid #27272a;color:#a1a1aa;width:30px;height:30px;border-radius:8px;font-size:16px;cursor:pointer">×</button>' +
-    '</div>' +
-
-    '<div style="font-size:10px;font-weight:800;letter-spacing:.12em;color:#71717a;margin-bottom:8px">ACCOUNT, MCP &amp; PRIVATE VAULT</div>' +
-    '<button type="button" class="glb_m_item" data-act="login" style="width:100%;text-align:left;background:#111827;border:1px solid #1f2937;color:#fff;padding:10px 12px;border-radius:10px;margin-bottom:8px;font-size:12px;font-weight:700;cursor:pointer">👤 Client Account Login &amp; API Key</button>' +
-    '<button type="button" class="glb_m_item" data-act="mcp" style="width:100%;text-align:left;background:#111827;border:1px solid #1f2937;color:#38bdf8;padding:10px 12px;border-radius:10px;margin-bottom:8px;font-size:12px;font-weight:700;cursor:pointer">🔌 MCP Server &amp; Agent Registration</button>' +
-    '<button type="button" class="glb_m_item" data-act="vault" style="width:100%;text-align:left;background:#052e16;border:1px solid #10b981;color:#34d399;padding:10px 12px;border-radius:10px;margin-bottom:14px;font-size:12px;font-weight:700;cursor:pointer">🔐 Private Client Document Vault (Isolated)</button>' +
-
-    '<div style="font-size:10px;font-weight:800;letter-spacing:.12em;color:#71717a;margin-bottom:8px">3 MEGA-ENGINES (KING OS)</div>' +
-    '<button type="button" class="glb_m_item" data-act="e1" style="width:100%;text-align:left;background:#18181b;border:1px solid #27272a;color:#e4e4e7;padding:9px 12px;border-radius:10px;margin-bottom:6px;font-size:12px;cursor:pointer">🛡️ Engine 01: 6-Layer Business Shield</button>' +
-    '<button type="button" class="glb_m_item" data-act="e2" style="width:100%;text-align:left;background:#18181b;border:1px solid #27272a;color:#e4e4e7;padding:9px 12px;border-radius:10px;margin-bottom:6px;font-size:12px;cursor:pointer">🔮 Engine 02: Predictive Demand Oracle</button>' +
-    '<button type="button" class="glb_m_item" data-act="e3" style="width:100%;text-align:left;background:#18181b;border:1px solid #27272a;color:#e4e4e7;padding:9px 12px;border-radius:10px;margin-bottom:6px;font-size:12px;cursor:pointer">⚡ Engine 03: Autonomous Growth Core</button>' +
-    '<button type="button" class="glb_m_item" data-act="tiers" style="width:100%;text-align:left;background:#18181b;border:1px solid #27272a;color:#FFD700;padding:9px 12px;border-radius:10px;margin-bottom:6px;font-size:12px;font-weight:700;cursor:pointer">💳 Enterprise Tiers &amp; 14-Day Pilot</button>' +
-    '</div>' +
-
-    '<div style="padding-top:12px;border-top:1px solid #1f2937;font-size:11px;color:#71717a">Client Data Isolation: <span style="color:#34d399">Zero-Knowledge Local Vault</span></div>' +
+    '<button id="glb_ham_btn" type="button" aria-label="Menu" style="position:fixed;top:12px;left:12px;z-index:9998;width:36px;height:36px;border-radius:10px;background:rgba(9,9,11,.92);border:1px solid rgba(255,215,0,.45);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer">' +
+    '<span style="width:16px;height:2px;background:#FFD700"></span>' +
+    '<span style="width:16px;height:2px;background:#38bdf8"></span>' +
+    '<span style="width:16px;height:2px;background:#FFD700"></span></button>' +
+    '<div id="glb_drawer_bg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999">' +
+    '<div style="width:290px;max-width:84vw;height:100%;background:#09090b;border-right:1px solid #27272a;padding:18px 16px;overflow-y:auto">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid #1f2937;margin-bottom:14px">' +
+    '<strong style="color:#fff;font-size:16px">GLOBOO <span style="color:#FFD700">AI</span></strong>' +
+    '<button id="glb_drawer_x" type="button" style="background:#18181b;border:1px solid #27272a;color:#a1a1aa;width:30px;height:30px;border-radius:8px">×</button></div>' +
+    '<button type="button" class="glb_m_item" data-act="login" style="width:100%;text-align:left;background:#111827;border:1px solid #1f2937;color:#fff;padding:10px;border-radius:10px;margin-bottom:8px;font-size:12px;font-weight:700">👤 Client Account Login</button>' +
+    '<button type="button" class="glb_m_item" data-act="mcp" style="width:100%;text-align:left;background:#111827;border:1px solid #1f2937;color:#38bdf8;padding:10px;border-radius:10px;margin-bottom:8px;font-size:12px;font-weight:700">🔌 MCP Agent Registration</button>' +
+    '<button type="button" class="glb_m_item" data-act="vault" style="width:100%;text-align:left;background:#052e16;border:1px solid #10b981;color:#34d399;padding:10px;border-radius:10px;margin-bottom:12px;font-size:12px;font-weight:700">🔐 Private Client Document Vault</button>' +
+    '<button type="button" class="glb_m_item" data-act="e1" style="width:100%;text-align:left;background:#18181b;border:1px solid #27272a;color:#e4e4e7;padding:9px;border-radius:10px;margin-bottom:6px;font-size:12px">🛡️ Engine 01: 6-Layer Shield</button>' +
+    '<button type="button" class="glb_m_item" data-act="e2" style="width:100%;text-align:left;background:#18181b;border:1px solid #27272a;color:#e4e4e7;padding:9px;border-radius:10px;margin-bottom:6px;font-size:12px">🔮 Engine 02: Demand Oracle</button>' +
+    '<button type="button" class="glb_m_item" data-act="e3" style="width:100%;text-align:left;background:#18181b;border:1px solid #27272a;color:#e4e4e7;padding:9px;border-radius:10px;margin-bottom:6px;font-size:12px">⚡ Engine 03: Growth Core</button>' +
+    '<button type="button" class="glb_m_item" data-act="tiers" style="width:100%;text-align:left;background:#18181b;border:1px solid #27272a;color:#FFD700;padding:9px;border-radius:10px;font-size:12px;font-weight:700">💳 Enterprise Tiers &amp; Pilot</button>' +
     '</div></div>';
-
   document.body.appendChild(wrap);
   var hdr = document.querySelector('header, nav');
   if (hdr) hdr.style.paddingLeft = '54px';
-
   var drawer = document.getElementById('glb_drawer_bg');
   document.getElementById('glb_ham_btn').onclick = function() { drawer.style.display = 'block'; };
   document.getElementById('glb_drawer_x').onclick = function() { drawer.style.display = 'none'; };
-  drawer.onclick = function(e) { if (e.target === drawer) drawer.style.display = 'none'; };
-
+})();
+</script>
+<script>
+(function() {
+  var drawer = document.getElementById('glb_drawer_bg');
   function openMcpModal() {
     gmt.innerHTML = '🔌 MCP SERVER &amp; AGENT REGISTRATION';
     gmb.innerHTML =
       '<div style="font-size:13px;color:#d4d4d8">' +
-      '<p style="font-size:12px;color:#a1a1aa;margin:0 0 10px">Register your autonomous AI agent (Claude, LangGraph, Cursor, or custom Python) to enforce GLOBOO 6-Layer Guardrails via Model Context Protocol (MCP).</p>' +
-      '<input id="mcp_agent" placeholder="Agent Name (e.g. Treasury-Bot-US-01)">' +
+      '<input id="mcp_agent" placeholder="Agent Name (e.g. Treasury-Bot-01)">' +
       '<input id="mcp_org" placeholder="Organization / Workspace ID">' +
-      '<input id="mcp_url" placeholder="MCP Endpoint / Webhook URL (https://...)">' +
-      '<button id="mcp_reg_btn" type="button" class="btn" style="background:#38bdf8!important;color:#082f49!important;font-weight:900!important">Register MCP Agent &amp; Issue Token →</button>' +
-      '<div id="mcp_res" style="display:none;margin-top:10px;background:#030712;border:1px solid #10b981;border-radius:10px;padding:10px;font-family:monospace;font-size:11px;color:#34d399"></div>' +
-      '</div>';
+      '<button id="mcp_reg_btn" type="button" class="btn" style="background:#38bdf8!important;color:#082f49!important;font-weight:900!important">Issue MCP Token →</button>' +
+      '<div id="mcp_res" style="display:none;margin-top:10px;background:#030712;border:1px solid #10b981;border-radius:10px;padding:10px;font-family:monospace;font-size:11px;color:#34d399"></div></div>';
     gm.style.display = 'flex';
     document.getElementById('mcp_reg_btn').onclick = async function() {
       var ag = (document.getElementById('mcp_agent').value || 'agent-01').trim();
-      var org = (document.getElementById('mcp_org').value || 'enterprise').trim();
-      var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(ag + org + Date.now()));
-      var tok = 'mcp_glb_' + Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('').slice(0, 28);
+      var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(ag + Date.now()));
+      var tok = 'mcp_glb_' + Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('').slice(0, 24);
       var res = document.getElementById('mcp_res');
       res.style.display = 'block';
-      res.innerHTML = '✓ MCP Agent Bound: <b>' + ag + '</b><br>MCP Auth Token: <b>' + tok + '</b><br>Status: Active (6-Layer Shield Enforced)';
+      res.innerHTML = '✓ MCP Bound: <b>' + ag + '</b><br>Token: <b>' + tok + '</b>';
     };
   }
-
   function openPrivateVaultModal() {
     var key = 'glb_private_vault_v1';
     var items = JSON.parse(localStorage.getItem(key) || '[]');
-    function renderVault() {
-      var listHtml = items.length ? items.map(function(it, idx) {
-        return '<div style="background:#111827;border:1px solid #1f2937;border-radius:8px;padding:8px 10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">' +
-          '<div><div style="font-size:12px;font-weight:700;color:#fff">' + it.title + '</div><div style="font-size:10px;font-family:monospace;color:#34d399">SHA-256: ' + it.hash + '</div></div>' +
-          '<button type="button" data-del="' + idx + '" style="background:none;border:none;color:#ef4444;font-size:12px;cursor:pointer">Delete</button>' +
-          '</div>';
-      }).join('') : '<div style="font-size:12px;color:#71717a;padding:8px 0">No private documents stored yet. Your vault is 100% isolated on your device.</div>';
-
-      gmt.innerHTML = '🔐 ISOLATED CLIENT DOCUMENT VAULT';
-      gmb.innerHTML =
-        '<div style="font-size:13px;color:#d4d4d8">' +
-        '<div style="background:#052e16;border:1px solid #10b981;border-radius:10px;padding:9px 11px;margin-bottom:10px;font-size:11px;color:#a7f3d0">' +
-        '<b>Zero-Knowledge Client Isolation:</b> Documents &amp; notes saved here stay strictly inside your private encrypted workspace—never shared or exposed to external servers.' +
-        '</div>' +
-        '<input id="vlt_title" placeholder="Document Title (e.g. Q4 Treasury Mandate / NDA)">' +
-        '<input id="vlt_body" placeholder="Confidential Content / Key / Contract Notes">' +
-        '<button id="vlt_save" type="button" class="btn" style="background:#10b981!important;color:#052e16!important;font-weight:900!important;margin-bottom:12px">+ Seal &amp; Save to Private Vault</button>' +
-        '<div>' + listHtml + '</div>' +
-        '</div>';
-      gm.style.display = 'flex';
-
-      document.getElementById('vlt_save').onclick = async function() {
-        var t = (document.getElementById('vlt_title').value || '').trim();
-        var b = (document.getElementById('vlt_body').value || '').trim();
-        if (!t || !b) return;
-        var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t + ':' + b + ':' + Date.now()));
-        var h = Array.from(new Uint8Array(buf)).map(function(x) { return x.toString(16).padStart(2, '0'); }).join('').slice(0, 20);
-        items.unshift({ title: t, body: b, hash: h });
-        localStorage.setItem(key, JSON.stringify(items));
-        renderVault();
-      };
-
-      gmb.querySelectorAll('[data-del]').forEach(function(btn) {btn.onclick = function() {
-items.splice(Number(btn.dataset.del), 1);
-localStorage.setItem(key, JSON.stringify(items));
-renderVault();
-};
-});
-}
-renderVault();
-}
-document.querySelectorAll('.glb_m_item').forEach(function(btn) {
-btn.onclick = function() {
-var act = btn.dataset.act;
-drawer.style.display = 'none';
-if (act === 'login') {
-var clBtn = Array.from(document.querySelectorAll('button, a')).find(function(x) { return (x.innerText || '').indexOf('Client') !== -1; });
-if (clBtn) clBtn.click();
-} else if (act === 'mcp') {
-openMcpModal();
-} else if (act === 'vault') {
-openPrivateVaultModal();
-} else if (act === 'e1') {
-var s1 = document.getElementById('glb_sdk_sec'); if (s1) s1.scrollIntoView({ behavior: 'smooth' });
-} else if (act === 'e2') {
-var s2 = document.getElementById('glb_oracle_sec'); if (s2) s2.scrollIntoView({ behavior: 'smooth' });
-} else if (act === 'e3') {
-var s3 = document.getElementById('glb_growth_sec'); if (s3) s3.scrollIntoView({ behavior: 'smooth' });
-} else if (act === 'tiers') {
-var st = document.getElementById('tiers'); if (st) st.scrollIntoView({ behavior: 'smooth' });
-}
-};
-});
+    gmt.innerHTML = '🔐 ISOLATED CLIENT DOCUMENT VAULT';
+    gmb.innerHTML =
+      '<div style="font-size:13px;color:#d4d4d8">' +
+      '<p style="font-size:11px;color:#34d399;margin:0 0 8px">Zero-Knowledge Client Isolation: Stored privately in your isolated encrypted workspace.</p>' +
+      '<input id="vlt_title" placeholder="Document Title (e.g. Q4 Treasury Mandate)">' +
+      '<input id="vlt_body" placeholder="Confidential Notes / Keys">' +
+      '<button id="vlt_save" type="button" class="btn" style="background:#10b981!important;color:#052e16!important;font-weight:900!important;margin-bottom:10px">+ Seal &amp; Save Document</button>' +
+      '<div id="vlt_list">' + items.map(function(it) { return '<div style="background:#111827;padding:8px;border-radius:8px;margin-bottom:6px;font-size:12px"><b>' + it.title + '</b><br><span style="color:#34d399;font-size:10px">SHA-256: ' + it.hash + '</span></div>'; }).join('') + '</div></div>';
+    gm.style.display = 'flex';
+    document.getElementById('vlt_save').onclick = async function() {
+      var t = (document.getElementById('vlt_title').value || '').trim();
+      var b = (document.getElementById('vlt_body').value || '').trim();
+      if (!t || !b) return;
+      var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t + b + Date.now()));
+      var h = Array.from(new Uint8Array(buf)).map(function(x) { return x.toString(16).padStart(2, '0'); }).join('').slice(0, 20);
+      items.unshift({ title: t, body: b, hash: h });
+      localStorage.setItem(key, JSON.stringify(items));
+      openPrivateVaultModal();
+    };
+  }
+  document.querySelectorAll('.glb_m_item').forEach(function(btn) {
+    btn.onclick = function() {
+      var act = btn.dataset.act;
+      if (drawer) drawer.style.display = 'none';
+      if (act === 'login') { var c = Array.from(document.querySelectorAll('button, a')).find(function(x) { return (x.innerText || '').indexOf('Client') !== -1; }); if (c) c.click(); }
+      else if (act === 'mcp') openMcpModal();
+      else if (act === 'vault') openPrivateVaultModal();
+      else if (act === 'e1') { var s1 = document.getElementById('glb_sdk_sec'); if (s1) s1.scrollIntoView({ behavior: 'smooth' }); }
+      else if (act === 'e2') { var s2 = document.getElementById('glb_oracle_sec'); if (s2) s2.scrollIntoView({ behavior: 'smooth' }); }
+      else if (act === 'e3') { var s3 = document.getElementById('glb_growth_sec'); if (s3) s3.scrollIntoView({ behavior: 'smooth' }); }
+      else if (act === 'tiers') { var st = document.getElementById('tiers'); if (st) st.scrollIntoView({ behavior: 'smooth' }); }
+    };
+  });
 })();
-        
+      </script>
 
 
 
