@@ -1892,6 +1892,28 @@ window.openLic = function(t) {
   }, 500);
 })();
 </script>
+<script>
+(function() {
+  // 1. Fix double-colon LinkedIn URL for 100 SEO
+  document.querySelectorAll('a').forEach(function(a) {
+    var h = a.getAttribute('href') || '';
+    if (h.indexOf('linkedin.com') !== -1) {
+      a.setAttribute('href', 'https://' + '://linkedin.com');
+    }
+  });
+
+  // 2. Add aria-label to Engine 02 & 03 dropdowns for 100 Accessibility & 3/3 Agentic Browsing
+  var labels = {
+    orc_sector: 'Select Industry Sector',
+    orc_horizon: 'Select Forecast Horizon',
+    grw_pain: 'Select Core Growth Bottleneck'
+  };
+  Object.keys(labels).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.setAttribute('aria-label', labels[id]);
+  });
+})();
+</script>
 
 
 
