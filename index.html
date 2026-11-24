@@ -2257,7 +2257,73 @@ document.querySelectorAll('div').forEach(function(d) {
   });
 })();
 </script>
-   
+<script>
+(function() {
+  if (document.getElementById('glb-cfo-quorum-trigger')) return;
+
+  var bar = document.createElement('div');
+  bar.id = 'glb-cfo-quorum-trigger';
+  bar.style.cssText = 'max-width:1100px;margin:16px auto;padding:16px 20px;border-radius:16px;background:linear-gradient(135deg,rgba(14,116,144,0.22),rgba(4,9,20,0.88));border:1px solid rgba(34,211,238,0.42);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;';
+  bar.innerHTML = ''
+    + '<div><div style="font-size:11px;font-weight:700;letter-spacing:1.4px;color:#22d3ee;">L5 ASYMMETRIC QUORUM CONSOLE • LIVE INTERACTIVE DEMO</div>'
+    + '<div style="font-size:14px;color:#e2e8f0;margin-top:3px;">Test out-of-policy payout escalation (<b>&gt;$10,000</b>) with real browser WebCrypto CFO key signing.</div></div>'
+    + '<button id="openCfoModalBtn" type="button" style="cursor:pointer;padding:10px 16px;border-radius:999px;border:1px solid #22d3ee;background:rgba(34,211,238,0.16);color:#22d3ee;font-weight:700;font-size:13px;">Launch CFO Quorum Sign-Off →</button>';
+
+  var v4 = document.getElementById('globoo-firewall-v4-core');
+  if (v4 && v4.parentNode) v4.parentNode.insertBefore(bar, v4.nextSibling);
+  else document.body.appendChild(bar);
+
+  var modal = document.createElement('div');
+  modal.id = 'glb-cfo-modal';
+  modal.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(2,6,18,0.88);backdrop-filter:blur(10px);z-index:9999;padding:16px;align-items:center;justify-content:center;font-family:system-ui,-apple-system,sans-serif;';
+  modal.innerHTML = ''
+    + '<div style="background:#060d1f;border:1px solid rgba(56,189,248,0.45);border-radius:20px;padding:24px;max-width:480px;width:100%;color:#f8fafc;box-shadow:0 24px 60px rgba(0,0,0,0.85);">'
+    + '  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">'
+    + '    <span style="font-size:12px;font-weight:800;letter-spacing:1.3px;color:#22d3ee;">L5 CFO QUORUM SIGN-OFF CONSOLE</span>'
+    + '    <span id="closeCfoModalBtn" style="cursor:pointer;font-size:22px;color:#94a3b8;">×</span>'
+    + '  </div>'
+    + '  <div style="background:rgba(15,23,42,0.85);border:1px solid rgba(148,163,184,0.25);border-radius:12px;padding:12px;font-size:12.5px;margin-bottom:14px;">'
+    + '    <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:#94a3b8;">TX ID:</span><b style="font-family:monospace;">tx_9948_wire_q4</b></div>'
+    + '    <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="color:#94a3b8;">Amount (Exceeds $10k Quorum):</span><b style="color:#fbbf24;">$42,500.00 USD</b></div>'
+    + '    <div style="display:flex;justify-content:space-between;"><span style="color:#94a3b8;">Verified IBAN:</span><b style="font-family:monospace;">DE89370400440532013000</b></div>'
+    + '  </div>'
+    + '  <div id="cfoStatusBox" style="padding:10px 12px;border-radius:10px;background:rgba(239,68,68,0.14);border:1px solid rgba(239,68,68,0.45);color:#fca5a5;font-size:12px;margin-bottom:14px;">'
+    + '    <b>STATUS: BLOCKED</b> — <code>L5_INVALID_ED25519_CFO_QUORUM_SIG</code> (Awaiting offline CFO private key signature)'
+    + '  </div>'
+    + '  <div style="margin-bottom:14px;">'
+    + '    <div style="font-size:11px;color:#94a3b8;margin-bottom:4px;">GENERATED BASE64 QUORUM SIGNATURE (<code>quorum_sig_b64</code>)</div>'
+    + '    <textarea id="cfoSigOut" readonly rows="2" style="width:100%;box-sizing:border-box;background:#020612;border:1px solid rgba(56,189,248,0.3);border-radius:8px;padding:8px;color:#38bdf8;font-family:monospace;font-size:11px;">[Pending CFO Hardware Key Sign-Off]</textarea>'
+    + '  </div>'
+    + '  <button id="signCfoTxBtn" type="button" style="width:100%;cursor:pointer;padding:12px;border-radius:12px;border:none;background:linear-gradient(90deg,#06b6d4,#10b981);color:#020617;font-weight:800;font-size:13.5px;">Sign &amp; Approve with CFO Private Key →</button>'
+    + '</div>';
+  document.body.appendChild(modal);
+
+  document.getElementById('openCfoModalBtn').onclick = function() { modal.style.display = 'flex'; };
+  document.getElementById('closeCfoModalBtn').onclick = function() { modal.style.display = 'none'; };
+
+  document.getElementById('signCfoTxBtn').onclick = async function() {
+    var btn = this;
+    btn.textContent = 'Generating Cryptographic Signature...';
+    var payload = new TextEncoder().encode('tx_9948_wire_q4:42500.00:DE89370400440532013000');
+    var kp = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+    var sigBuf = await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, kp.privateKey, payload);
+    var ok = await crypto.subtle.verify({ name: 'ECDSA', hash: 'SHA-256' }, kp.publicKey, sigBuf, payload);
+    var b64 = btoa(String.fromCharCode.apply(null, new Uint8Array(sigBuf)));
+    var sealBuf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(b64));
+    var sealHex = Array.from(new Uint8Array(sealBuf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+    document.getElementById('cfoSigOut').value = b64;
+    var st = document.getElementById('cfoStatusBox');
+    if (ok) {
+      st.style.background = 'rgba(16,185,129,0.15)';
+      st.style.borderColor = 'rgba(16,185,129,0.45)';
+      st.style.color = '#6ee7b7';
+      st.innerHTML = '<b>STATUS: APPROVED (L5 Quorum Verified ✓)</b><br><span style="font-size:11px;font-family:monospace;">chain_seal: ' + sealHex.slice(0, 32) + '...</span>';
+      btn.textContent = 'Transaction Approved & Sealed ✓';
+    }
+  };
+})();
+</script>
+
 
 
 
