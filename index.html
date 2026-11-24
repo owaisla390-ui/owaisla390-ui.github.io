@@ -2763,6 +2763,13 @@ document.querySelectorAll('div').forEach(function(d) {
   });
 })();
 </script>
+<script>
+document.querySelectorAll('div, pre, code').forEach(function(el) {
+  if (!el.querySelector('div, pre') && el.textContent.indexOf('class GloboPolicyShield') !== -1 && typeof pyV3 !== 'undefined') {
+    el.textContent = pyV3;
+  }
+});
+</script>
 
 
 
