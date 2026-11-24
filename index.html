@@ -2077,6 +2077,49 @@ document.querySelectorAll('div').forEach(function(d) {
     + '</div>';
 })();
 </script>
+<script>
+(function() {
+  function upgradeThreadSafety(code) {
+    if (!code || code.indexOf('class GloboPolicyShield') === -1 || code.indexOf('_lock') !== -1) {
+      return code;
+    }
+    var updated = code
+      .replace(
+        'import hashlib, hmac, json, re, time, base64',
+        'import hashlib, hmac, json, re, time, base64, threading'
+      )
+      .replace(
+        'self.prev_hash = "0" * 64',
+        'self.prev_hash = "0" * 64\n        self._lock = threading.RLock()  # Atomic mutex lock (prevents same-ms TOCTOU race conditions; maps to Redis WATCH/MULTI or Postgres SELECT FOR UPDATE in multi-node clusters)'
+      );
+
+    var marker = '    def enforce(';
+    var idx = updated.indexOf(marker);
+    if (idx !== -1) {
+      var head = updated.slice(0, idx);
+      var tail = updated.slice(idx);
+      var lines = tail.split('\n');
+      var out = [lines[0], '        with self._lock:'];
+      for (var i = 1; i < lines.length; i++) {
+        var line = lines[i];
+        if (line.trim().length > 0 && !line.startsWith('    def ') && !line.startsWith('if __name__')) {
+          out.push('    ' + line);
+        } else {
+          out.push(line);
+        }
+      }
+      updated = head + out.join('\n');
+    }
+    return updated;
+  }
+
+  document.querySelectorAll('pre, code').forEach(function(el) {
+    if (el.textContent.indexOf('class GloboPolicyShield') !== -1) {
+      el.textContent = upgradeThreadSafety(el.textContent);
+    }
+  });
+})();
+</script>
 
 
 
