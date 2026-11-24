@@ -2367,70 +2367,30 @@ document.querySelectorAll('div').forEach(function(d) {
 </script>
 <script>
 (function() {
-  // 1. Add $499/mo FinTech Growth Tier directly above $4,999/mo card
-  if (!document.getElementById('glb-growth-tier-card')) {
-    var proBtn = Array.from(document.querySelectorAll('button, a')).find(function(b) {
-      return (b.textContent || '').indexOf('From $4,999 / month') !== -1;
+  var oldCard = document.getElementById('glb-growth-tier-card');
+  if (oldCard) oldCard.remove();
+
+  var tierSection = Array.from(document.querySelectorAll('section, div')).find(function(el) {
+    return el.textContent.indexOf('Enterprise Deployment Tiers') !== -1 && el.textContent.indexOf('Enterprise Global License') !== -1 && el.querySelectorAll('section, div').length < 15;
+  });
+
+  if (tierSection) {
+    var proCard = Array.from(tierSection.children).find(function(ch) {
+      return (ch.textContent || '').indexOf('Self-Hosted Python SDK') !== -1;
     });
-    if (proBtn && proBtn.closest('div') && proBtn.closest('div').parentNode) {
-      var proCard = proBtn.closest('div');
+    if (proCard) {
       var c = document.createElement('div');
       c.id = 'glb-growth-tier-card';
       c.style.cssText = 'padding:24px;border-radius:18px;background:linear-gradient(155deg,rgba(6,182,212,0.16),rgba(6,13,28,0.94));border:1.5px solid rgba(34,211,238,0.55);margin-bottom:18px;';
-      c.innerHTML = '<div style="font-size:11px;font-weight:800;letter-spacing:1.4px;color:#22d3ee;margin-bottom:6px;">FINTECH STARTUP &amp; GROWTH</div><div style="font-size:23px;font-weight:800;color:#fff;margin-bottom:8px;">Cloud VPC Guardrail — $499 / month</div><div style="font-size:13.5px;color:#cbd5e1;margin-bottom:18px;">Up to 250k monthly AI tool checks, Stripe &amp; QuickBooks adapters, L5 Ed25519 CFO Quorum &amp; tamper-proof audit trail.</div><button type="button" class="glb-open-reg-btn" data-plan="FinTech Startup & Growth ($499/mo - 14-Day Free Pilot)" style="width:100%;cursor:pointer;padding:14px 20px;border-radius:999px;border:none;background:#22d3ee;color:#020617;font-weight:800;font-size:14.5px;">Start 14-Day Free Pilot ($499 / month) →</button>';
-      proCard.parentNode.insertBefore(c, proCard);
+      c.innerHTML = '<div style="font-size:11px;font-weight:800;letter-spacing:1.4px;color:#22d3ee;margin-bottom:6px;">FINTECH STARTUP &amp; GROWTH</div><div style="font-size:23px;font-weight:800;color:#fff;margin-bottom:8px;">Cloud VPC Guardrail — $499 / month</div><div style="font-size:13.5px;color:#cbd5e1;margin-bottom:18px;">Up to 250k monthly AI tool checks, Stripe &amp; QuickBooks adapters, L5 Ed25519 CFO Quorum &amp; tamper-proof audit trail.</div><button type="button" onclick="var b=Array.from(document.querySelectorAll(\'button,a\')).find(x=>x.textContent.trim()===\'Client Login\');if(b)b.click();" style="width:100%;cursor:pointer;padding:14px 20px;border-radius:999px;border:none;background:#22d3ee;color:#020617;font-weight:800;font-size:14.5px;">Start 14-Day Free Pilot ($499 / month) →</button>';
+      tierSection.insertBefore(c, proCard);
     }
   }
-
-  // 2. Capture Full Name, Company, Address & Work Email on EVERY Registration / License Click and email to globooai@gmail.com
-  function sendLeadToGmail(name, company, address, email, plan) {
-    fetch('https://formsubmit.co', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        _subject: 'NEW GLOBOO CLIENT: ' + company + ' (' + plan + ')',
-        Client_Full_Name: name,
-        Company_Name: company,
-        Company_Address: address,
-        Work_Email: email,
-        Selected_Plan: plan,
-        Timestamp_UTC: new Date().toUTCString()
-      })
-    }).catch(function() {});
-  }
-
-  // Intercept Enterprise Client Registration form submit
-  document.addEventListener('submit', function(e) {
-    var form = e.target;
-    if (!form) return;
-    var inputs = Array.from(form.querySelectorAll('input:not([type="hidden"])'));
-    if (inputs.length >= 4) {
-      sendLeadToGmail(inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value, window._glbSelectedPlan || 'Enterprise Workspace Registration');
-    }
-  }, true);
-
-  // Also bind Register & Launch Workspace button click directly (in case JS handler prevents form submit event)
-  document.addEventListener('click', function(e) {
-    var btn = e.target.closest('button, a');
-    if (!btn) return;
-    var txt = (btn.textContent || '').trim();
-    if (txt.indexOf('Get License') !== -1 || txt.indexOf('Request License') !== -1 || txt.indexOf('Start 14-Day') !== -1 || txt.indexOf('Request Private SDK') !== -1) {
-      window._glbSelectedPlan = txt;
-      var regTrigger = Array.from(document.querySelectorAll('button, a')).find(function(b) {
-        return (b.textContent || '').trim() === 'Client Login';
-      });
-      if (regTrigger) { e.preventDefault(); e.stopImmediatePropagation(); regTrigger.click(); }
-    }
-    if (txt.indexOf('Register & Launch Workspace') !== -1) {
-      var box = btn.closest('div');
-      var inputs = box ? Array.from(box.querySelectorAll('input:not([type="hidden"])')) : [];
-      if (inputs.length >= 4 && inputs[0].value && inputs[3].value) {
-        sendLeadToGmail(inputs[0].value, inputs[1].value, inputs[2].value, inputs[3].value, window._glbSelectedPlan || 'Enterprise Workspace Registration');
-      }
-    }
-  }, true);
 })();
 </script>
+
+
+
 
 
 
