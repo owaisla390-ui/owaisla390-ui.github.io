@@ -2388,6 +2388,49 @@ document.querySelectorAll('div').forEach(function(d) {
   }
 })();
 </script>
+<script>
+(function() {
+  // 1. Place $499/mo FinTech Growth Card DIRECTLY above "Self-Hosted Python SDK" card
+  if (!document.getElementById('glb-growth-tier-card')) {
+    var sdkHeading = Array.from(document.querySelectorAll('h1,h2,h3,h4,div,strong,b')).find(function(el) {
+      return (el.textContent || '').trim() === 'Self-Hosted Python SDK';
+    });
+    if (sdkHeading) {
+      var sdkCard = sdkHeading.closest('div[style], section, article') || sdkHeading.parentElement;
+      if (sdkCard && sdkCard.parentElement) {
+        var c = document.createElement('div');
+        c.id = 'glb-growth-tier-card';
+        c.style.cssText = 'padding:24px;border-radius:18px;background:linear-gradient(155deg,rgba(6,182,212,0.16),rgba(6,13,28,0.94));border:1.5px solid rgba(34,211,238,0.55);margin-bottom:18px;';
+        c.innerHTML = '<div style="font-size:11px;font-weight:800;letter-spacing:1.4px;color:#22d3ee;margin-bottom:6px;">FINTECH STARTUP &amp; GROWTH</div><div style="font-size:23px;font-weight:800;color:#fff;margin-bottom:8px;">Cloud VPC Guardrail — $499 / month</div><div style="font-size:13.5px;color:#cbd5e1;margin-bottom:18px;">Up to 250k monthly AI tool checks, Stripe &amp; QuickBooks adapters, L5 Ed25519 CFO Quorum &amp; tamper-proof audit trail.</div><button type="button" class="glb-tier-trigger" style="width:100%;cursor:pointer;padding:14px 20px;border-radius:999px;border:none;background:#22d3ee;color:#020617;font-weight:800;font-size:14.5px;">Start 14-Day Free Pilot ($499 / month) →</button>';
+        sdkCard.insertAdjacentElement('beforebegin', c);
+      }
+    }
+  }
+
+  // 2. Open the 4-Field Registration Modal (Name, Company, Address, Email) whenever ANY License/Pilot button is clicked
+  function openRegistrationModal(planName) {
+    var loginBtn = Array.from(document.querySelectorAll('button, a')).find(function(b) {
+      return (b.textContent || '').trim() === 'Client Login';
+    });
+    if (loginBtn) {
+      loginBtn.click();
+      setTimeout(function() {
+        var planField = document.querySelector('input[name="Selected_Plan"], input[name="Plan"]');
+        if (planField) planField.value = planName;
+      }, 150);
+    }
+  }
+
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('button, a');
+    if (!btn) return;
+    var txt = (btn.textContent || '').trim();
+    if (txt.indexOf('Get License') !== -1 || txt.indexOf('Request License') !== -1 || txt.indexOf('Start 14-Day') !== -1 || txt.indexOf('Request Private SDK') !== -1) {
+      openRegistrationModal(txt);
+    }
+  });
+})();
+</script>
 
 
 
