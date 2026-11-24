@@ -2219,6 +2219,46 @@ document.querySelectorAll('div').forEach(function(d) {
   });
 })();
 </script>
+<script>
+(function() {
+  // 1. Sync Top SDK Snippet to exact v3.9 signature
+  document.querySelectorAll('pre, code, div').forEach(function(el) {
+    if (!el.querySelector('div, pre') && el.textContent.indexOf('api_key="glb_live_key"') !== -1) {
+      el.textContent = [
+        'from globoo_shield import GloboPolicyShield',
+        'shield = GloboPolicyShield(audit_hmac_key=os.environ["GLOBOO_AUDIT_HMAC_KEY"], cfo_public_key_pem=os.environ["GLOBOO_CFO_PUB_PEM"], max_single_usd="50000.00", quorum_threshold_usd="10000.00", allowed_ibans={"GB29NWBK60161331926819"})',
+        'print(shield.guard_stripe_payout({"id": "po_901", "amount": 950000, "destination_iban": "GB29NWBK60161331926819", "description": "Demo Shipping Co. freight settlement"}))'
+      ].join('\n');
+    }
+  });
+
+  // 2. Unify all version badges & labels to v3.9
+  document.body.innerHTML = document.body.innerHTML
+    .replace(/\(v3\.0\)/g, '(v3.9)')
+    .replace(/• v3\.8/g, '• v3.9')
+    .replace(/Engine 01: 6-Layer Shield/g, 'L1–L4: Deterministic Policy Engine')
+    .replace(/Engine 02: Demand Oracle/g, 'L5: Ed25519 CFO Quorum Sign-Off')
+    .replace(/Engine 03: Growth Core/g, 'L6: Forensic Audit & PDF Export');
+
+  // 3. Add $999/mo FinTech Growth & Startup Tier above $4,999 tier
+  if (!document.getElementById('glb-growth-tier-card')) {
+    var btns = Array.from(document.querySelectorAll('button, a'));
+    var proBtn = btns.find(function(b) { return (b.textContent || '').indexOf('$4,999 / month') !== -1; });
+    if (proBtn && proBtn.parentElement && proBtn.parentElement.parentElement) {
+      var proCard = proBtn.parentElement;
+      var growthCard = document.createElement('div');
+      growthCard.id = 'glb-growth-tier-card';
+      growthCard.style.cssText = 'padding:22px;border-radius:18px;background:linear-gradient(155deg,rgba(6,182,212,0.14),rgba(6,13,28,0.92));border:1px solid rgba(34,211,238,0.45);margin-bottom:18px;';
+      growthCard.innerHTML = ''
+        + '<div style="font-size:11px;font-weight:800;letter-spacing:1.3px;color:#22d3ee;margin-bottom:6px;">FINTECH STARTUP &amp; GROWTH TIER</div>'
+        + '<div style="font-size:22px;font-weight:800;color:#ffffff;margin-bottom:8px;">Cloud VPC Guardrail</div>'
+        + '<div style="font-size:13.5px;color:#cbd5e1;margin-bottom:16px;">Up to 250k monthly AI tool checks, Stripe/QuickBooks adapters, L5 CFO Quorum &amp; 14-Day Read-Only Pilot.</div>'
+        + '<a href="mailto:sales@://globooai.com—%20FinTech%20Growth%20Tier%20($999%2Fmo)" style="display:block;text-align:center;padding:13px 18px;border-radius:999px;background:#22d3ee;color:#020617;font-weight:800;font-size:14px;text-decoration:none;">From $999 / month — Start 14-Day Pilot</a>';
+      proCard.parentElement.insertBefore(growthCard, proCard);
+    }
+  }
+})();
+</script>
 
 
 
