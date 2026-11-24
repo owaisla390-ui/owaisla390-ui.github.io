@@ -2347,6 +2347,24 @@ document.querySelectorAll('div').forEach(function(d) {
   }
 })();
 </script>
+<script>
+(function() {
+  if (document.getElementById('glb-growth-tier-card')) return;
+  var proBtn = Array.from(document.querySelectorAll('button, a')).find(function(b) {
+    return (b.textContent || '').indexOf('From $4,999 / month') !== -1;
+  });
+  if (proBtn) {
+    var proCard = proBtn.closest('div');
+    if (proCard && proCard.parentNode) {
+      var c = document.createElement('div');
+      c.id = 'glb-growth-tier-card';
+      c.style.cssText = 'padding:24px;border-radius:18px;background:linear-gradient(155deg,rgba(6,182,212,0.16),rgba(6,13,28,0.94));border:1.5px solid rgba(34,211,238,0.55);margin-bottom:18px;';
+      c.innerHTML = '<div style="font-size:11px;font-weight:800;letter-spacing:1.4px;color:#22d3ee;margin-bottom:6px;">FINTECH STARTUP &amp; GROWTH</div><div style="font-size:23px;font-weight:800;color:#fff;margin-bottom:8px;">Cloud VPC Guardrail — $499 / month</div><div style="font-size:13.5px;color:#cbd5e1;margin-bottom:18px;">Up to 250k monthly AI tool checks, Stripe &amp; QuickBooks adapters, L5 Ed25519 CFO Quorum &amp; tamper-proof audit trail.</div><a href="mailto:sales@://globooai.com" style="display:block;text-align:center;padding:14px 20px;border-radius:999px;background:#22d3ee;color:#020617;font-weight:800;font-size:14.5px;text-decoration:none;">Start 14-Day Free Pilot ($499 / month) →</a>';
+      proCard.parentNode.insertBefore(c, proCard);
+    }
+  }
+})();
+</script>
 
 
 
