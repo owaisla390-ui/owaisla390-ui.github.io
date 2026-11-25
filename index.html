@@ -2469,6 +2469,51 @@ document.querySelectorAll('div').forEach(function(d) {
   }, true);
 })();
 </script>
+<script>
+(function() {
+  window._glbCurrentPlan = 'FinTech Startup & Growth ($499 / month)';
+
+  // 1. Track exact plan clicked ($499, $4,999, or $25,000) & open the 4-field modal cleanly
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('button, a');
+    if (!btn) return;
+    var txt = (btn.textContent || '').trim();
+    if (txt.indexOf('499') !== -1 && txt.indexOf('4,999') === -1) {
+      window._glbCurrentPlan = 'FinTech Startup & Growth ($499 / month — 14-Day Pilot)';
+    } else if (txt.indexOf('4,999') !== -1 || txt.indexOf('Get License') !== -1) {
+      window._glbCurrentPlan = 'Self-Hosted Python SDK ($4,999 / month)';
+    } else if (txt.indexOf('25,000') !== -1 || txt.indexOf('Request License') !== -1) {
+      window._glbCurrentPlan = 'Enterprise Global License ($25,000 / month)';
+    } else {
+      return;
+    }
+    var loginBtn = Array.from(document.querySelectorAll('button, a')).find(function(b) {
+      return (b.textContent || '').trim() === 'Client Login';
+    });
+    if (loginBtn) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      loginBtn.click();
+    }
+  }, true);
+
+  // 2. Block empty "Modal Opened" pings & attach Selected_Plan + Name + Email + Company + Address to every real submission
+  var origFetch = window.fetch;
+  window.fetch = function(url, opts) {
+    if (typeof url === 'string' && url.indexOf('formsubmit.co') !== -1 && opts && opts.body) {
+      try {
+        var data = typeof opts.body === 'string' ? JSON.parse(opts.body) : {};
+        if (data.Event === 'License Procurement Modal Opened') {
+          return Promise.resolve(new Response('{"success":"true"}', { status: 200 }));
+        }
+        data.Selected_Plan = window._glbCurrentPlan || 'Enterprise Plan';
+        opts.body = JSON.stringify(data);
+      } catch (err) {}
+    }
+    return origFetch.apply(this, arguments);
+  };
+})();
+  </script>
 
 
 
