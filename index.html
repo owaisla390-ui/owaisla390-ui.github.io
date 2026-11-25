@@ -2748,6 +2748,44 @@ document.querySelectorAll('div').forEach(function(d) {
     flex: 0 0 auto !important;
   }
 </style>
+<script>
+(function() {
+  // 1. Lock "Generate Instant Sandbox API Key" behind Lead Capture (no anonymous freebies)
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('button, a');
+    if (!btn) return;
+    var txt = (btn.textContent || '').trim();
+
+    if (txt.indexOf('Generate Instant Sandbox API Key') !== -1) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      window._glbCurrentPlan = 'Instant Sandbox API Key Request (Free Trial Lead)';
+      var loginBtn = Array.from(document.querySelectorAll('button, a')).find(function(b) {
+        return (b.textContent || '').trim() === 'Client Login';
+      });
+      if (loginBtn) loginBtn.click();
+      return;
+    }
+
+    // 2. Route "Launch Engine" smoothly to Live Sandbox & "Watch 60-Sec Demo" to L5 CFO Quorum Console
+    if (txt === 'Launch Engine' || txt.indexOf('Test Live Firewall') !== -1) {
+      var sb = document.getElementById('sb') || document.getElementById('globoo-firewall-v4-core');
+      if (sb) { e.preventDefault(); sb.scrollIntoView({ behavior: 'smooth' }); }
+    } else if (txt.indexOf('Watch 60-Sec Demo') !== -1) {
+      var cfoBtn = Array.from(document.querySelectorAll('button')).find(function(b) {
+        return (b.textContent || '').indexOf('Launch CFO Quorum Sign-Off') !== -1;
+      });
+      if (cfoBtn) { e.preventDefault(); e.stopImmediatePropagation(); cfoBtn.click(); }
+    }
+  }, true);
+
+  // 3. Ensure every footer/mailto link points strictly to @globooai.com (zero @globoo.ai leaks)
+  document.querySelectorAll('a[href*="globoo.ai"]').forEach(function(a) {
+    a.href = a.href.replace(/globoo\.ai/g, 'globooai.com');
+    a.textContent = a.textContent.replace(/globoo\.ai/g, 'globooai.com');
+  });
+})();
+</script>
 
 
 
