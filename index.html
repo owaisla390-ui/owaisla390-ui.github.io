@@ -2722,6 +2722,17 @@ document.querySelectorAll('div').forEach(function(d) {
   }, true);
 })();
 </script>
+<style>
+  #glbMcpInput { min-width: 0 !important; flex: 1 1 auto !important; }
+  #glbAddMcpBtn { flex: 0 0 auto !important; white-space: nowrap !important; }
+  @media print {
+    body * { visibility: hidden !important; }
+    #glb-pdf-modal-v39, #glb-pdf-modal-v39 * { visibility: visible !important; }
+    #glb-pdf-modal-v39 { position: absolute !important; inset: 0 !important; background: #fff !important; padding: 0 !important; display: block !important; }
+    #glb-pdf-modal-v39 > div { box-shadow: none !important; max-width: 100% !important; max-height: none !important; overflow: visible !important; }
+    #glbClosePdfV39, #glbPrintPdfNowBtn { display: none !important; }
+  }
+</style>
 
 
 
