@@ -2788,79 +2788,64 @@ document.querySelectorAll('div').forEach(function(d) {
 </script>
 <script>
 (function () {
-  function launchLiveSandboxWithKey(apiKey) {
-    // 1. Close any open registration/workspace modal
-    document.querySelectorAll('[role="dialog"], .modal, #workspace-modal, #register-modal').forEach(function (el) {
-      el.style.display = 'none';
-      el.classList.add('hidden');
+  function closeModalAndScrollToSandbox() {
+    // 1. Click native modal close button (×) if present
+    document.querySelectorAll('button').forEach(function (b) {
+      var t = (b.textContent || '').trim();
+      if (t === '×' || t === '✕' || b.getAttribute('aria-label') === 'Close') {
+        b.click();
+      }
     });
-    document.querySelectorAll('.fixed.inset-0').forEach(function (overlay) {
-      if (overlay.innerText && (overlay.innerText.includes('WORKSPACE') || overlay.innerText.includes('ENTERPRISE CLIENT REGISTRATION'))) {
-        overlay.style.display = 'none';
+    // 2. Hide any remaining dark backdrop overlay
+    document.querySelectorAll('[role="dialog"], .modal, [id*="modal"], [class*="modal"]').forEach(function (el) {
+      if (el.id !== 'sb' && !el.closest('#sb')) {
+        el.style.display = 'none';
       }
     });
     document.body.style.overflow = '';
 
-    // 2. Inject active API key into sandbox key input/badge if present
-    var sandboxKeyEl = document.querySelector('#sandbox-api-key, [data-sandbox-key], input[name="api_key"]');
-    if (sandboxKeyEl && apiKey) {
-      if ('value' in sandboxKeyEl) sandboxKeyEl.value = apiKey;
-      else sandboxKeyEl.textContent = apiKey;
-    }
-
-    // 3. Smooth scroll directly to the live 6-layer sandbox
-    var sandboxSection = document.querySelector('#sandbox, #firewall-sandbox, [data-section="sandbox"]') ||
-      Array.from(document.querySelectorAll('section, div')).find(function (el) {
-        return el.id && el.id.toLowerCase().includes('sandbox');
-      });
-    if (sandboxSection) {
-      sandboxSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // 3. Smooth scroll to live 6-layer sandbox (#sb)
+    var sb = document.getElementById('sb') || document.getElementById('globoo-firewall-v4-core') || document.querySelector('[id*="sandbox"]');
+    if (sb) {
+      sb.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 
-  // Intercept "Register & Launch Workspace" & "Sign Out / Register New" loop
+  // Handle "Register & Launch Workspace" & "Launch Live 6-Layer Firewall Sandbox"
   document.addEventListener('click', function (e) {
     var btn = e.target.closest('button, a');
     if (!btn) return;
-    var label = (btn.innerText || '').trim();
+    var label = (btn.textContent || '').trim();
 
-    if (label.includes('Register & Launch Workspace')) {
-      setTimeout(function () {
-        var keyInput = document.querySelector('input[value^="glb_live_"], input[value^="glb_test_"]');
-        var liveKey = keyInput ? keyInput.value : 'glb_live_' + Math.random().toString(36).substring(2, 18);
-        localStorage.setItem('globoo_active_api_key', liveKey);
-        launchLiveSandboxWithKey(liveKey);
-      }, 250);
+    if (label.indexOf('Register & Launch Workspace') !== -1) {
+      setTimeout(closeModalAndScrollToSandbox, 300);
     }
-
-    if (label.includes('Launch Live 6-Layer Firewall Sandbox')) {
+    if (label.indexOf('Launch Live 6-Layer Firewall Sandbox') !== -1) {
       e.preventDefault();
-      var savedKey = localStorage.getItem('globoo_active_api_key') || 'glb_live_sandbox_active';
-      launchLiveSandboxWithKey(savedKey);
+      e.stopImmediatePropagation();
+      closeModalAndScrollToSandbox();
     }
   }, true);
 
-  // Inject "Launch Live 6-Layer Firewall Sandbox" button inside WORKSPACE modal whenever opened
-  var observer = new MutationObserver(function () {
-    document.querySelectorAll('div').forEach(function (box) {
-      if (
-        box.innerText &&
-        box.innerText.includes('PRODUCTION FIREWALL API KEY') &&
-        !box.querySelector('#globoo-direct-launch-btn')
-      ) {
-        var actionBtn = document.createElement('button');
-        actionBtn.id = 'globoo-direct-launch-btn';
-        actionBtn.type = 'button';
-        actionBtn.textContent = 'Launch Live 6-Layer Firewall Sandbox →';
-        actionBtn.style.cssText =
-          'width:100%;margin-top:14px;padding:12px 16px;border-radius:10px;border:none;background:#10b981;color:#04130d;font-weight:700;font-size:14px;cursor:pointer;';
-        box.appendChild(actionBtn);
-      }
+  // Add strictly ONE button inside WORKSPACE modal (never duplicates)
+  setInterval(function () {
+    if (document.getElementById('globoo-single-launch-btn')) return;
+    var rotateBtn = Array.from(document.querySelectorAll('button')).find(function (b) {
+      return (b.textContent || '').indexOf('Rotate Key') !== -1;
     });
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
+    if (rotateBtn && rotateBtn.parentElement && rotateBtn.parentElement.parentElement) {
+      var btn = document.createElement('button');
+      btn.id = 'globoo-single-launch-btn';
+      btn.type = 'button';
+      btn.textContent = 'Launch Live 6-Layer Firewall Sandbox →';
+      btn.style.cssText = 'width:100%;margin-top:12px;padding:12px 16px;border-radius:10px;border:none;background:#10b981;color:#04130d;font-weight:700;font-size:14px;cursor:pointer;';
+      rotateBtn.parentElement.parentElement.appendChild(btn);
+    }
+  }, 400);
 })();
 </script>
+
+
 
 
 
